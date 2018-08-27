@@ -1,9 +1,16 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-  </head>
-  <body>
-    SUSHEE
-  </body>
-</html>
+{% extends "shopping/layout.html" %}
+
+{% block title %}
+SuShee Fashionista
+{% endblock %}
+
+{% block body %}
+<hr>
+{% if message %}{{message}}{% endif %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  });
+</script>
+
+{% endblock %}

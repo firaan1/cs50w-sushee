@@ -1,0 +1,24 @@
+{% extends "shopping/layout.html" %}
+
+{% block title %}
+SuShee Fashionista
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1>Login</h1>
+  {% if message %}
+  <div>
+    {{ message }}
+  </div>
+  {% endif %}
+  <div class="form-group">
+    <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+      <input class="form-control" name="username" type="text" placeholder="User Name" autofocus/>
+      <input class="form-control" name="password" type="password" placeholder="Password"/>
+      <input class="btn btn-primary" type="submit" value="Login"/>
+    </form>
+  </div>
+</div>
+{% endblock %}

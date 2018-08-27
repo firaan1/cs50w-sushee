@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script> -->
+    <script src="{% static 'shopping/handlebars.min.js' %}"></script>
+  </head>
+  <body>
+    <div class="container">
+      <form>
+        <div class="form-group">
+          <button type="button" class="btn btn-primary btnloc" id="btn_home" data-urlfor="/">Home</button>
+          <button type="button" class="btn btn-primary btnloc" id="btn_order" data-urlfor="/order">Order</button>
+          <button type="button" class="btn btn-primary btnloc" id="btn_cart" data-urlfor="/show_order">Cart</button>
+          <button type="button" class="btn btn-primary btnloc" id="btn_cart" data-urlfor="/make_payment">Order Histories</button>
+          <button type="button" class="btn btn-primary loggedout btnloc" id="btn_login" data-urlfor="/login">Login</button>
+          <button type="button" class="btn btn-primary loggedin btnloc" id="btn_logout" data-urlfor="/logout">Logout</button>
+          <button type="button" class="btn btn-default loggedout btnloc" id="btn_register" data-urlfor="/register">Register</button>
+        </div>
+    </form>
+    </div>
+
+    {% block body %}
+    {% endblock %}
+
+    <script type="text/javascript">
+
+    if("{{request.user.id}}" != "None") {
+      const loggedout = document.querySelectorAll('.loggedout');
+      loggedout[0].style.display = "none";
+      loggedout[1].style.display = "none";
+      document.querySelector('.loggedin').style.display = "inline";
+    } else {
+      document.querySelector('.loggedin').style.display = "none";
+      const loggedout = document.querySelectorAll('.loggedout');
+      loggedout[0].style.display = "inline";
+      loggedout[1].style.display = "inline";
+    }
+
+    // button functions
+    document.querySelectorAll('.btnloc').forEach(
+      button => {
+        button.onclick = () => {
+          location.href = location.protocol + '//' + document.domain + ':' + location.port + button.dataset.urlfor
+        }
+      }
+    );
+  // }
+
+    </script>
+
+  </body>
+</html>
