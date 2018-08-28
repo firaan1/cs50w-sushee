@@ -40,3 +40,9 @@ class Colour(models.Model):
     code = models.CharField(max_length = 7)
     def __str__(self):
         return f"{self.name}"
+
+# image upload
+class Document(models.Model):
+    document = models.FileField(upload_to='documents/%Y/%m/%d')
+    description = models.CharField(max_length=255, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)

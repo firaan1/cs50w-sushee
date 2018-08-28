@@ -5,14 +5,31 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
+from django.conf import settings
+
 from django.core.serializers import serialize
 import json, stripe, datetime
 from .models import *
+from .forms import *
 
 # Create your views here.
 def index(request):
-    return render(request, "shopping/index.html", {"message" : None})
+    context = {"message" : None, "form" : None}
+    return render(request, "shopping/index.html", context)
 
+# file upload
+def model_form_upload(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            context = {"message" : "upload successful", "form" : form}
+        else:
+            context = {"message" : "upload failed", "form" : form}
+    else:
+        form = DocumentForm()
+        context = {"message" : None, "form" : form}
+    return render(request, "shopping/index.html", context)
 
 # login/registration
 # check email function
