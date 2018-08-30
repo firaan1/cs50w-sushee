@@ -6,6 +6,8 @@
     <title>{% block title %}{% endblock %}</title>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script> -->
     <script src="{% static 'shopping/handlebars.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   </head>
   <body>
     <div class="container">
@@ -15,6 +17,9 @@
           <button type="button" class="btn btn-primary btnloc" id="btn_order" data-urlfor="/order">Order</button>
           <button type="button" class="btn btn-primary btnloc" id="btn_cart" data-urlfor="/show_order">Cart</button>
           <button type="button" class="btn btn-primary btnloc" id="btn_cart" data-urlfor="/make_payment">Order Histories</button>
+          {% if request.user.is_staff %}
+            <button type="button" class="btn btn-primary btnloc" id="btn_additems" data-urlfor="/additems">Add items</button>
+          {% endif %}
           <button type="button" class="btn btn-primary loggedout btnloc" id="btn_login" data-urlfor="/login">Login</button>
           <button type="button" class="btn btn-primary loggedin btnloc" id="btn_logout" data-urlfor="/logout">Logout</button>
           <button type="button" class="btn btn-default loggedout btnloc" id="btn_register" data-urlfor="/register">Register</button>
@@ -48,6 +53,24 @@
       }
     );
   // }
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
     </script>
 

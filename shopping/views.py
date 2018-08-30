@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.conf import settings
 
@@ -11,6 +11,10 @@ from django.core.serializers import serialize
 import json, stripe, datetime
 from .models import *
 from .forms import *
+
+# admin check
+def admin_check(user):
+    return user.is_staff
 
 # Create your views here.
 def index(request):
@@ -25,6 +29,29 @@ def index(request):
     else:
         pass
     return render(request, "shopping/index.html", context)
+
+def order(request):
+    context = {}
+    return render(request, "shopping/order.html", context)
+
+@user_passes_test(admin_check)
+def additems(request):
+    context = {
+        "color" : serialize("json", Color.objects.get_queryset()),
+        "sareesize" : serialize("json", SareeSize.objects.get_queryset()),
+        "trousersize" : serialize("json", TrouserSize.objects.get_queryset()),
+        "topsize" : serialize("json", TopSize.objects.get_queryset()),
+        "kurtasize" : serialize("json", KurtaSize.objects.get_queryset())
+    }
+    if request.method == "POST":
+        return HttpResponse(request.POST['dresstype'])
+        images = request.FILES.getlist("images")
+        uploaded_images = []
+        for i in images:
+            upload = Document(document = i)
+            upload.save()
+            uploaded_images.append(upload)
+    return render(request, "shopping/additems.html", context)
 
 def model_form_upload(request):
     # Handle file upload

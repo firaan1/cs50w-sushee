@@ -2,7 +2,7 @@ from shopping.models import *
 import csv
 
 # importing colors
-f = open("prep/html_colors.csv")
+f = open("prep/html_common_colors.csv")
 reader = csv.reader(f)
 for name, code in reader:
     name

@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
+# indian rupees
+rupees = u"\u20B9"
 
 ## size chart
 # Indian & fusion wear
@@ -32,6 +34,11 @@ class TrouserSize(models.Model):
     def __str__(self):
         return f"{self.size}"
 
+class SareeSize(models.Model):
+    size = models.CharField(max_length = 25, default="Free Size", unique = True)
+    def __str__(self):
+        return f"{self.size}"
+
 # saree & blouses (free size)
 
 ## colors
@@ -47,8 +54,42 @@ class Document(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
 
 # rates
-# class KurtaRate(models.Model):
-#     name = models.CharField(max_length = 100)
-#     model = models.CharField(max_length = 25)
-#     size = models.ForeignKey(KurtaSize, on_delete = models.CASCADE, related_name = "kurta_size")
-#     colour = models.ForeignKey(Colour, on_delete = models.SET_NULL, null = True, related_name = "kurta_colour")
+class KurtaRate(models.Model):
+    name = models.CharField(max_length = 100)
+    model = models.CharField(max_length = 25)
+    image = models.ManyToManyField(Document, related_name = "kurta_image")
+    size = models.ForeignKey(KurtaSize, on_delete = models.CASCADE, related_name = "kurta_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "kurta_color")
+    price = models.DecimalField(max_digits = 7, decimal_places = 2)
+    def __str__(self):
+        return f"{self.name} cost {rupees}{self.price}"
+
+class TopRate(models.Model):
+    name = models.CharField(max_length = 100)
+    model = models.CharField(max_length = 25)
+    image = models.ManyToManyField(Document, related_name = "top_image")
+    size = models.ForeignKey(TopSize, on_delete = models.CASCADE, related_name = "top_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "top_color")
+    price = models.DecimalField(max_digits = 7, decimal_places = 2)
+    def __str__(self):
+        return f"{self.name} cost {rupees}{self.price}"
+
+class TrouserRate(models.Model):
+    name = models.CharField(max_length = 100)
+    model = models.CharField(max_length = 25)
+    image = models.ManyToManyField(Document, related_name = "trouser_image")
+    size = models.ForeignKey(TrouserSize, on_delete = models.CASCADE, related_name = "trouser_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "trouser_color")
+    price = models.DecimalField(max_digits = 7, decimal_places = 2)
+    def __str__(self):
+        return f"{self.name} cost {rupees}{self.price}"
+
+class SareeRate(models.Model):
+    name = models.CharField(max_length = 100)
+    model = models.CharField(max_length = 25)
+    image = models.ManyToManyField(Document, related_name = "saree_image")
+    size = models.ForeignKey(SareeSize, on_delete = models.CASCADE, related_name = "saree_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "saree_color")
+    price = models.DecimalField(max_digits = 7, decimal_places = 2)
+    def __str__(self):
+        return f"{self.name} cost {rupees}{self.price}"
