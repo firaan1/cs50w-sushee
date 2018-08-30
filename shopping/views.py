@@ -16,6 +16,23 @@ from .forms import *
 def admin_check(user):
     return user.is_staff
 
+rate_dict = {
+    "kurta" : {"rate" : KurtaRate, "size" : KurtaSize },
+    "top" : {"rate" : TopRate, "size" : TopSize },
+    "trouser" : {"rate" : TrouserRate, "size" : TrouserSize },
+    "saree" : {"rate" : SareeRate, "size" : SareeSize }
+    }
+
+# recently_added = {"kurta" : [],"top" : [],"trouser" : [],"saree" : []}
+
+def recently_added_dresses():
+    recently_added = {}
+    recently_added["kurta"] = KurtaRate.objects.order_by('-pk')[:5]
+    recently_added["top"] = TopRate.objects.order_by('-pk')[:5]
+    recently_added["trouser"] = TrouserRate.objects.order_by('-pk')[:5]
+    recently_added["saree"] = SareeRate.objects.order_by('-pk')[:5]
+    return recently_added
+
 # Create your views here.
 def index(request):
     context = {}
@@ -44,13 +61,29 @@ def additems(request):
         "kurtasize" : serialize("json", KurtaSize.objects.get_queryset())
     }
     if request.method == "POST":
-        return HttpResponse(request.POST['dresstype'])
-        images = request.FILES.getlist("images")
+        dresstype = request.POST['dresstype']
+        dressname = request.POST[f"t_{dresstype}name"]
+        dressmodel = request.POST[f"t_{dresstype}model"]
+        dresssize = request.POST[f"{dresstype}size"]
+        dresscolor = request.POST[f"{dresstype}color"]
+        dressprice = request.POST[f"p_{dresstype}"]
+        images = request.FILES.getlist(f"i_{dresstype}image")
         uploaded_images = []
         for i in images:
             upload = Document(document = i)
             upload.save()
             uploaded_images.append(upload)
+        # return HttpResponse(str(uploaded_images))
+        # adding to rate ORM
+        dressrate_obj = rate_dict[dresstype]['rate']
+        dresssize_obj = rate_dict[dresstype]['size']
+        dress = dressrate_obj(name = dressname, model = dressmodel, size = dresssize_obj.objects.get(pk = dresssize), color = Color.objects.get(code = dresscolor), price = dressprice)
+        dress.save()
+        if uploaded_images:
+            dress.image.set(uploaded_images)
+            dress.save()
+    # recently added
+    context["recently_added"] = recently_added_dresses()
     return render(request, "shopping/additems.html", context)
 
 def model_form_upload(request):

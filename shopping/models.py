@@ -55,6 +55,7 @@ class Document(models.Model):
 
 # rates
 class KurtaRate(models.Model):
+    dresstype = models.CharField(max_length = 25, default="kurta", editable = False)
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "kurta_image")
@@ -65,6 +66,7 @@ class KurtaRate(models.Model):
         return f"{self.name} cost {rupees}{self.price}"
 
 class TopRate(models.Model):
+    dresstype = models.CharField(max_length = 25, default="top", editable = False)
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "top_image")
@@ -75,6 +77,7 @@ class TopRate(models.Model):
         return f"{self.name} cost {rupees}{self.price}"
 
 class TrouserRate(models.Model):
+    dresstype = models.CharField(max_length = 25, default="trouser", editable = False)
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "trouser_image")
@@ -85,6 +88,7 @@ class TrouserRate(models.Model):
         return f"{self.name} cost {rupees}{self.price}"
 
 class SareeRate(models.Model):
+    dresstype = models.CharField(max_length = 25, default="saree", editable = False)
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "saree_image")
