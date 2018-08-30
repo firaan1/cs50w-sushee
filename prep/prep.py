@@ -1,12 +1,12 @@
 from shopping.models import *
 import csv
 
-# importing colours
-f = open("prep/html_colours.csv")
+# importing colors
+f = open("prep/html_colors.csv")
 reader = csv.reader(f)
 for name, code in reader:
     name
-    c = Colour(name = name, code = code)
+    c = Color(name = name, code = code)
     c.save()
     del(c)
 
@@ -19,7 +19,7 @@ for size, tofitbust, frontlength, tofitwaist, tofithip in reader:
     c.save()
     del(c)
 
-# importing colours
+# importing colors
 f = open("prep/topsize.csv")
 reader = csv.reader(f)
 for size, tofitbust, frontlength, tofitwaist in reader:
@@ -28,7 +28,7 @@ for size, tofitbust, frontlength, tofitwaist in reader:
     c.save()
     del(c)
 
-# importing colours
+# importing colors
 f = open("prep/trousersize.csv")
 reader = csv.reader(f)
 for size, tofitwaist, tofithip in reader:

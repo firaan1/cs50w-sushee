@@ -10,7 +10,7 @@ SuShee Fashionista
 
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <input name="files" type="file" size="50" accept="image/*" multiple>
+  {{ form }}
   <button type="submit">Upload</button>
 </form>
 

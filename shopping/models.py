@@ -34,8 +34,8 @@ class TrouserSize(models.Model):
 
 # saree & blouses (free size)
 
-## colours
-class Colour(models.Model):
+## colors
+class Color(models.Model):
     name = models.CharField(max_length = 25, unique = True)
     code = models.CharField(max_length = 7)
     def __str__(self):
@@ -44,5 +44,11 @@ class Colour(models.Model):
 # image upload
 class Document(models.Model):
     document = models.FileField(upload_to='documents/%Y/%m/%d')
-    description = models.CharField(max_length=255, blank=True)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+
+# rates
+# class KurtaRate(models.Model):
+#     name = models.CharField(max_length = 100)
+#     model = models.CharField(max_length = 25)
+#     size = models.ForeignKey(KurtaSize, on_delete = models.CASCADE, related_name = "kurta_size")
+#     colour = models.ForeignKey(Colour, on_delete = models.SET_NULL, null = True, related_name = "kurta_colour")

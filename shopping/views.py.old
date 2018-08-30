@@ -14,16 +14,18 @@ from .forms import *
 
 # Create your views here.
 def index(request):
-    context = {}
     # testing form
     if request.method == 'POST':
-        files = request.FILES.getlist('files')
-        for f in files:
-            fileupload = Document(document = f)
-            fileupload.save()
-        context = {"test" : fileupload.document.url}
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            context = {"message" : "upload successful", "form" : form, "test" : form.document}
+        else:
+            context = {"message" : "upload failed", "form" : form}
     else:
-        pass
+        form = DocumentForm()
+        context = {"message" : None, "form" : form}
+    # context = {"message" : None, "form" : None}
     return render(request, "shopping/index.html", context)
 
 def model_form_upload(request):
