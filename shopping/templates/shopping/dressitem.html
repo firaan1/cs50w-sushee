@@ -10,18 +10,33 @@ SuShee Fashionista
 <div class="container">
   <!-- name -->
   <div>
-    <h3>{{dress.name}} ({{dress.model}})</h3>
+    <h3>Name (Model)</h3>{{dress.name}} ({{dress.model}})
   </div>
   <!-- image -->
   <div id="ind_images">
+    <h3>Images</h3>
     {% for image in dress.image.all %}
       <div>
         <img src="{{image.document.url}}" alt="{{image}}"/>
       </div>
     {% endfor %}
   </div>
+  <!-- color -->
+  <div>
+    <h3>Color</h3>
+    {% for dresscolor in dresscolor_obj %}
+      <div class="form-check form-check-inline">
+        {% if dress.image.first.color.code == dresscolor.image.first.color.code %}
+          <a href="/{{dresscolor.dresstype}}/{{dresscolor.pk}}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;border-style: solid;border-color:black;">&#9673;<a>
+        {% else %}
+          <a href="/{{dresscolor.dresstype}}/{{dresscolor.pk}}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;">&#9673;<a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
   <!-- size -->
   <div>
+    <h3>Size</h3>
     {%for size in dresssize %}
       <div class="form-check form-check-inline">
       {% if size in dress.size.all %}
@@ -38,7 +53,9 @@ SuShee Fashionista
       </div>
     {% endfor %}
   </div>
-  <!-- color -->
+  <!-- price -->
+  <h3>Price</h3>
+  {{currency}}{{dress.price}}
 </div>
 
 <script>

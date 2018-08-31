@@ -151,21 +151,17 @@ SuShee Fashionista
         // dressobj_dict
         if(anchor.id === "kurta"){
           // dressobj_dict = {"kurtasize" : {{kurtasize|safe}}}
-          dressobj_dict["kurtasize"] = {{kurtasize|safe}}
           dressobj_dict["kurtacolor"] = {{color|safe}}
-        }
-        if(anchor.id === "top"){
-          dressobj_dict = {"topsize" : {{topsize|safe}}}
+          dressobj_dict["kurtasize"] = {{kurtasize|safe}}
+        } else if(anchor.id === "top"){
           dressobj_dict["topcolor"] = {{color|safe}}
-        }
-        if(anchor.id === "trouser"){
-          dressobj_dict = {"trousersize" : {{trousersize|safe}}}
+          dressobj_dict["topsize"] = {{topsize|safe}}
+        } else if(anchor.id === "trouser"){
           dressobj_dict["trousercolor"] = {{color|safe}}
-
-        }
-        if(anchor.id === "saree"){
-          dressobj_dict = {"sareesize" : {{sareesize|safe}}}
+          dressobj_dict["trousersize"] = {{trousersize|safe}}
+        } else if(anchor.id === "saree"){
           dressobj_dict["sareecolor"] = {{color|safe}}
+          dressobj_dict["sareesize"] = {{sareesize|safe}}
         }
 
         // create elements
@@ -198,6 +194,9 @@ SuShee Fashionista
     // model
     ddresstype.innerHTML += input_text_template({"dresstype" : dresstype, "vartype" : dresstype + "model"});
 
+    // add images
+    ddresstype.innerHTML += input_image_template({"dresstype" : dresstype, "vartype" : dresstype + "image"});
+
     // dress categories
     dressobj_list = Object.keys(dressobj_dict);
     dressobj_list.forEach(index => {
@@ -215,9 +214,6 @@ SuShee Fashionista
 
     // add size input hidden
     ddresstype.innerHTML += input_text_template({"dresstype" : dresstype, "vartype" : dresstype + "size"})
-
-    // add images
-    ddresstype.innerHTML += input_image_template({"dresstype" : dresstype, "vartype" : dresstype + "image"});
 
     // add price
     ddresstype.innerHTML += input_template({"dresstype" : dresstype});

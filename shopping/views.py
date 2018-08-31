@@ -55,9 +55,12 @@ def dressitem(request, dress_type, dress_id):
     try:
         dress = rate_dict[dress_type]['rate'].objects.get(pk = dress_id)
         dresssize = rate_dict[dress_type]['size'].objects.all()
+        dresscolor_obj = rate_dict[dress_type]['rate'].objects.filter(model = dress.model)
     except:
         return render(request, "shopping/index.html", {"message" : "Requested item does not exist"})
     context = {
+        "currency" : rupees,
+        "dresscolor_obj" : dresscolor_obj,
         "dresssize" : dresssize,
         "dress" : dress
     }
@@ -86,7 +89,7 @@ def additems(request):
         images = request.FILES.getlist(f"i_{dresstype}image")
         uploaded_images = []
         for i in images:
-            upload = Document(document = i)
+            upload = Document(document = i, color = Color.objects.get(code = dresscolor))
             upload.save()
             uploaded_images.append(upload)
         # return HttpResponse(str(uploaded_images))
@@ -94,7 +97,7 @@ def additems(request):
         dressrate_obj = rate_dict[dresstype]['rate']
         dresssize_obj = rate_dict[dresstype]['size']
         dresssize_list = [dresssize_obj.objects.get(pk = d) for d in dresssize]
-        dress = dressrate_obj(name = dressname, model = dressmodel, color = Color.objects.get(code = dresscolor), price = dressprice)
+        dress = dressrate_obj(name = dressname, model = dressmodel, price = dressprice)
         dress.save()
         if dresssize_list:
             dress.size.set(dresssize_list)

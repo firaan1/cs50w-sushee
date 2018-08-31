@@ -51,7 +51,6 @@ class Color(models.Model):
 # image upload
 class Document(models.Model):
     document = models.FileField(upload_to='documents/%Y/%m/%d')
-    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "dress_color")
     datetime = models.DateTimeField(auto_now_add=True)
 
 # rates
@@ -60,7 +59,9 @@ class KurtaRate(models.Model):
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "kurta_image")
+    size = models.ForeignKey(KurtaSize, on_delete = models.CASCADE, related_name = "kurta_size")
     size = models.ManyToManyField(KurtaSize, related_name = "kurta_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "kurta_color")
     price = models.DecimalField(max_digits = 7, decimal_places = 2)
     def __str__(self):
         return f"{self.name} cost {rupees}{self.price}"
@@ -70,7 +71,8 @@ class TopRate(models.Model):
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "top_image")
-    size = models.ManyToManyField(TopSize, related_name = "top_size")
+    size = models.ForeignKey(TopSize, on_delete = models.CASCADE, related_name = "top_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "top_color")
     price = models.DecimalField(max_digits = 7, decimal_places = 2)
     def __str__(self):
         return f"{self.name} cost {rupees}{self.price}"
@@ -80,7 +82,8 @@ class TrouserRate(models.Model):
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "trouser_image")
-    size = models.ManyToManyField(TrouserSize, related_name = "trouser_size")
+    size = models.ForeignKey(TrouserSize, on_delete = models.CASCADE, related_name = "trouser_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "trouser_color")
     price = models.DecimalField(max_digits = 7, decimal_places = 2)
     def __str__(self):
         return f"{self.name} cost {rupees}{self.price}"
@@ -90,7 +93,8 @@ class SareeRate(models.Model):
     name = models.CharField(max_length = 100)
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "saree_image")
-    size = models.ManyToManyField(SareeSize, related_name = "saree_size")
+    size = models.ForeignKey(SareeSize, on_delete = models.CASCADE, related_name = "saree_size")
+    color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "saree_color")
     price = models.DecimalField(max_digits = 7, decimal_places = 2)
     def __str__(self):
         return f"{self.name} cost {rupees}{self.price}"
