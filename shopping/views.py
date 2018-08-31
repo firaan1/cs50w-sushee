@@ -54,9 +54,11 @@ def dressitem(request, dress_type, dress_id):
         return render(request, "shopping/index.html", {"message" : "Unknown URL path"})
     try:
         dress = rate_dict[dress_type]['rate'].objects.get(pk = dress_id)
+        dresssize = rate_dict[dress_type]['size'].objects.all()
     except:
         return render(request, "shopping/index.html", {"message" : "Requested item does not exist"})
     context = {
+        "dresssize" : dresssize,
         "dress" : dress
     }
     return render(request, "shopping/dressitem.html", context)
@@ -76,7 +78,9 @@ def additems(request):
         dresstype = request.POST['dresstype']
         dressname = request.POST[f"t_{dresstype}name"]
         dressmodel = request.POST[f"t_{dresstype}model"]
-        dresssize = request.POST[f"{dresstype}size"]
+        # dresssize = request.POST[f"{dresstype}size"]
+        dresssize = request.POST[f"t_{dresstype}size"]
+        dresssize = dresssize.split(",")
         dresscolor = request.POST[f"{dresstype}color"]
         dressprice = request.POST[f"p_{dresstype}"]
         images = request.FILES.getlist(f"i_{dresstype}image")
@@ -89,8 +93,12 @@ def additems(request):
         # adding to rate ORM
         dressrate_obj = rate_dict[dresstype]['rate']
         dresssize_obj = rate_dict[dresstype]['size']
-        dress = dressrate_obj(name = dressname, model = dressmodel, size = dresssize_obj.objects.get(pk = dresssize), color = Color.objects.get(code = dresscolor), price = dressprice)
+        dresssize_list = [dresssize_obj.objects.get(pk = d) for d in dresssize]
+        dress = dressrate_obj(name = dressname, model = dressmodel, color = Color.objects.get(code = dresscolor), price = dressprice)
         dress.save()
+        if dresssize_list:
+            dress.size.set(dresssize_list)
+            dress.save()
         if uploaded_images:
             dress.image.set(uploaded_images)
             dress.save()

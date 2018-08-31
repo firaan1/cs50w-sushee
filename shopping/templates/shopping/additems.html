@@ -57,7 +57,7 @@ SuShee Fashionista
   </div>
 </script>
 <!-- <script id="span_template" type="text/x-handlebars-template">
-  <span id="span_{{vartype}}" class="cspan" data-price=""></span>
+  <span id="span_{{vartype}}" name="span_{{vartype}}" class="cspan" value=""></span>
 </script> -->
 <script id="input_template" type="text/x-handlebars-template">
   <div class="form-group">
@@ -92,7 +92,7 @@ SuShee Fashionista
         <div>
            {{#each ../image}}
             {{#strequals this.pk ../this.fields.image.[0]}}
-              <a href="#"><img src="/media/{{this.fields.document}}" alt="{{this.fields.document}}"/></a>
+              <a href="{{../../dresstype}}/{{../this.pk}}"><img src="/media/{{this.fields.document}}" alt="{{this.fields.document}}"/></a>
             {{/strequals}}
            {{/each}}
           <br>
@@ -213,6 +213,9 @@ SuShee Fashionista
       ddresstype.innerHTML += select_template({"dresstype" : dresstype, "vartype" : index, "varlist" : varlist});
     });
 
+    // add size input hidden
+    ddresstype.innerHTML += input_text_template({"dresstype" : dresstype, "vartype" : dresstype + "size"})
+
     // add images
     ddresstype.innerHTML += input_image_template({"dresstype" : dresstype, "vartype" : dresstype + "image"});
 
@@ -237,15 +240,25 @@ SuShee Fashionista
     dressname = document.querySelector('#t_' + dresstype + 'name');
     dressmodel = document.querySelector('#t_' + dresstype + 'model');
     dresssize = document.querySelector('#s' + dresstype + 'size');
+    dresssizeinput = document.querySelector('#t_' + dresstype + 'size');
     dresscolor = document.querySelector('#s' + dresstype + 'color');
     dressimage = document.querySelector('#i_' + dresstype + 'image');
     dressprice = document.querySelector('#p_' + dresstype);
     dressadd = document.querySelector('#btn_' + dresstype);
 
+    // multiple size input
+    dresssize.multiple = true;
+    dresssizeinput.parentElement.style.display = "none";
     [dressname, dressmodel, dresssize, dresscolor, dressimage, dressprice].forEach(event => {
       event.oninput = () => {
         if(event === dresscolor){
           event.style.color = event.value;
+        } else if (event === dresssize){
+          size_pk = []
+          for(i=0;i<dresssize.selectedOptions.length;i++){
+            size_pk.push(dresssize.selectedOptions[i].value);
+          }
+          document.querySelector('#t_' + event.dataset.dresstype + "size").value = size_pk;
         }
         button_status();
       }

@@ -60,6 +60,7 @@ class KurtaRate(models.Model):
     model = models.CharField(max_length = 25)
     image = models.ManyToManyField(Document, related_name = "kurta_image")
     size = models.ForeignKey(KurtaSize, on_delete = models.CASCADE, related_name = "kurta_size")
+    size = models.ManyToManyField(KurtaSize, related_name = "kurta_size")
     color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "kurta_color")
     price = models.DecimalField(max_digits = 7, decimal_places = 2)
     def __str__(self):

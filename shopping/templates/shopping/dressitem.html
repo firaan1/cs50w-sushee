@@ -8,9 +8,11 @@ SuShee Fashionista
 <hr>
 
 <div class="container">
+  <!-- name -->
   <div>
     <h3>{{dress.name}} ({{dress.model}})</h3>
   </div>
+  <!-- image -->
   <div id="ind_images">
     {% for image in dress.image.all %}
       <div>
@@ -18,9 +20,25 @@ SuShee Fashionista
       </div>
     {% endfor %}
   </div>
+  <!-- size -->
   <div>
-    {{dress.size}}
+    {%for size in dresssize %}
+      <div class="form-check form-check-inline">
+      {% if size in dress.size.all %}
+        {% if size == dress.size.all.0 %}
+          <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size}}" checked>
+        {% else %}
+          <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size}}">
+        {% endif %}
+        <label class="form-check-label" for="option{{size}}"><b>{{size}}</b></label>
+      {% else %}
+        <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size}}" disabled>
+        <label class="form-check-label" for="option{{size}}">{{size}}</label>
+      {% endif %}
+      </div>
+    {% endfor %}
   </div>
+  <!-- color -->
 </div>
 
 <script>
