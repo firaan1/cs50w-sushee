@@ -90,14 +90,16 @@ SuShee Fashionista
     <div class="flexdisplay">
       {{#each dressdata}}
         <div>
-          {{this.fields.image}}
-          {{#each ../image}}
-            {{#strequals this.pk ../this.fields.image}}
-              <img src="/media/{{this.fields.document}}" alt="{{this.fields.document}}"/>
+           {{#each ../image}}
+            {{#strequals this.pk ../this.fields.image.[0]}}
+              <a href="#"><img src="/media/{{this.fields.document}}" alt="{{this.fields.document}}"/></a>
             {{/strequals}}
-          {{/each}}
-
-          <!-- <span class="rdressname">{{this.fields.name}}</span> -->
+           {{/each}}
+          <br>
+          <p>
+            <span class="rdressname">{{this.fields.name}}</span>
+            <span class="rdressprice">({% endverbatim %}{{currency}}{% verbatim %}{{this.fields.price}})</span>
+          </p>
         </div>
       {{/each}}
     </div>

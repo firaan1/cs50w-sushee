@@ -49,9 +49,22 @@ def order(request):
     context = {}
     return render(request, "shopping/order.html", context)
 
+def dressitem(request, dress_type, dress_id):
+    if not dress_type in rate_dict.keys():
+        return render(request, "shopping/index.html", {"message" : "Unknown URL path"})
+    try:
+        dress = rate_dict[dress_type]['rate'].objects.get(pk = dress_id)
+    except:
+        return render(request, "shopping/index.html", {"message" : "Requested item does not exist"})
+    context = {
+        "dress" : dress
+    }
+    return render(request, "shopping/dressitem.html", context)
+
 @user_passes_test(admin_check)
 def additems(request):
     context = {
+        "currency" : rupees,
         "image" : serialize("json", Document.objects.all()),
         "color" : serialize("json", Color.objects.get_queryset()),
         "sareesize" : serialize("json", SareeSize.objects.get_queryset()),
@@ -81,8 +94,8 @@ def additems(request):
         if uploaded_images:
             dress.image.set(uploaded_images)
             dress.save()
+        return HttpResponseRedirect(reverse("additems"))
     # recently added
-    # context["recently_added"] = serialize("json", recently_added_dresses())
     context["recently_added"] = recently_added_dresses()
     return render(request, "shopping/additems.html", context)
 

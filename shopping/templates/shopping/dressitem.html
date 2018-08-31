@@ -1,0 +1,31 @@
+{% extends "shopping/layout.html" %}
+
+{% block title %}
+SuShee Fashionista
+{% endblock %}
+
+{% block body %}
+<hr>
+
+<div class="container">
+  <div>
+    <h3>{{dress.name}} ({{dress.model}})</h3>
+  </div>
+  <div id="ind_images">
+    {% for image in dress.image.all %}
+      <div>
+        <img src="{{image.document.url}}" alt="{{image}}"/>
+      </div>
+    {% endfor %}
+  </div>
+  <div>
+    {{dress.size}}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  });
+</script>
+
+{% endblock %}
