@@ -23,14 +23,12 @@ rate_dict = {
     "saree" : {"rate" : SareeRate, "size" : SareeSize }
     }
 
-# recently_added = {"kurta" : [],"top" : [],"trouser" : [],"saree" : []}
-
 def recently_added_dresses():
     recently_added = {}
-    recently_added["kurta"] = KurtaRate.objects.order_by('-pk')[:5]
-    recently_added["top"] = TopRate.objects.order_by('-pk')[:5]
-    recently_added["trouser"] = TrouserRate.objects.order_by('-pk')[:5]
-    recently_added["saree"] = SareeRate.objects.order_by('-pk')[:5]
+    recently_added["kurta"] = json.loads(serialize("json", KurtaRate.objects.order_by('-pk')[:4]))
+    recently_added["top"] = json.loads(serialize("json",TopRate.objects.order_by('-pk')[:4]))
+    recently_added["trouser"] = json.loads(serialize("json",TrouserRate.objects.order_by('-pk')[:4]))
+    recently_added["saree"] = json.loads(serialize("json",SareeRate.objects.order_by('-pk')[:4]))
     return recently_added
 
 # Create your views here.
@@ -54,6 +52,7 @@ def order(request):
 @user_passes_test(admin_check)
 def additems(request):
     context = {
+        "image" : serialize("json", Document.objects.all()),
         "color" : serialize("json", Color.objects.get_queryset()),
         "sareesize" : serialize("json", SareeSize.objects.get_queryset()),
         "trousersize" : serialize("json", TrouserSize.objects.get_queryset()),
@@ -83,6 +82,7 @@ def additems(request):
             dress.image.set(uploaded_images)
             dress.save()
     # recently added
+    # context["recently_added"] = serialize("json", recently_added_dresses())
     context["recently_added"] = recently_added_dresses()
     return render(request, "shopping/additems.html", context)
 

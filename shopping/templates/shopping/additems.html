@@ -32,8 +32,13 @@ SuShee Fashionista
 </div>
 
 <!-- recently added -->
-  {{ recently_added.kurta }}
-  
+<div class="container" id="recent1">
+  <div class="container recentdiv" data-dresstype="kurta"></div>
+  <div class="container recentdiv" data-dresstype="top"></div>
+  <div class="container recentdiv" data-dresstype="trouser"></div>
+  <div class="container recentdiv" data-dresstype="saree"></div>
+</div>
+
 <!-- handlebars -->
 {% verbatim %}
 <script id="select_template" type="text/x-handlebars-template">
@@ -75,11 +80,30 @@ SuShee Fashionista
 </script>
 <script id="addbtn_template" type="text/x-handlebars-template">
   <div class="form-group">
-    <!-- <button type="button" class="btn btn-primary make_order" id="btn_{{dresstype}}" data-dresstype="{{dresstype}}" data-pk="" data-quantity="" data-others="" data-todo="add">Add item</button> -->
-    <!-- <button type="button" class="btn btn-primary add_item" id="btn_{{dresstype}}" data-dresstype="{{dresstype}}" data-todo="add">Add item</button> -->
     <button type="submit" class="btn btn-primary add_item" id="btn_{{dresstype}}" data-dresstype="{{dresstype}}" data-todo="add" name="images">Add item</button>
   </div>
 </script>
+
+<script id="recent_template" type="text/x-handlebars-template">
+  <div class="form-group">
+    <h3>{{dresstype}}</h3>
+    <div class="flexdisplay">
+      {{#each dressdata}}
+        <div>
+          {{this.fields.image}}
+          {{#each ../image}}
+            {{#strequals this.pk ../this.fields.image}}
+              <img src="/media/{{this.fields.document}}" alt="{{this.fields.document}}"/>
+            {{/strequals}}
+          {{/each}}
+
+          <!-- <span class="rdressname">{{this.fields.name}}</span> -->
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</script>
+
 {% endverbatim %}
 <!--  -->
 <script>
@@ -93,6 +117,13 @@ SuShee Fashionista
           return opts.inverse(this);
       }
     });
+    Handlebars.registerHelper('strequals', function(a, b, opts) {
+      if (a == b) {
+          return opts.fn(this);
+      } else {
+          return opts.inverse(this);
+      }
+    });
 
     // handlebars templates
     select_template = Handlebars.compile(document.querySelector('#select_template').innerHTML);
@@ -101,6 +132,7 @@ SuShee Fashionista
     input_text_template = Handlebars.compile(document.querySelector('#input_text_template').innerHTML);
     input_image_template = Handlebars.compile(document.querySelector('#input_image_template').innerHTML);
     addbtn_template = Handlebars.compile(document.querySelector('#addbtn_template').innerHTML);
+    recent_template = Handlebars.compile(document.querySelector('#recent_template').innerHTML);
 
     // dress anchors
     document.querySelectorAll('.menubtn').forEach(anchor => {
@@ -144,7 +176,15 @@ SuShee Fashionista
         anchor_div.style.display = "block";
       };
     });
+
+    // recently_added
+    image = {{image|safe}}
+    recently_added = {{recently_added|safe}}
+    document.querySelectorAll('.recentdiv').forEach(item => {
+      item.innerHTML += recent_template({"dresstype" : item.dataset.dresstype, "dressdata" : recently_added[item.dataset.dresstype], "image" : image});
+    });
   });
+  // end of contentloaded
 
   function add_dress(dresstype, dressobj_dict){
     const ddresstype = document.querySelector('#d' + dresstype);
@@ -208,30 +248,6 @@ SuShee Fashionista
         button_status();
       }
     });
-
-    // dressadd.onclick = () => {
-    //   // csrf token
-    //   const csrftoken = getCookie('csrftoken')
-    //
-    //   const request = new XMLHttpRequest();
-    //   request.open("POST", "additems");
-    //   request.setRequestHeader("X-CSRFToken", csrftoken);
-    //   request.onload = () => {
-    //     console.log(request.responseText);
-    //     location.reload();
-    //   };
-    //   const data = new FormData();
-    //   data.append('dresstype', dressadd.dataset.dresstype);
-    //   data.append('dressname', dressname.value);
-    //   data.append('dressmodel', dressmodel.value);
-    //   data.append('dresssize', dresssize.options[dresssize.selectedIndex].value);
-    //   data.append('dresscolor', dresscolor.options[dresscolor.selectedIndex].value);
-    //   data.append('dressimage', )
-    //   request.send(data);
-    //
-    // }
-
-
   };
 
   function button_status(){

@@ -1,0 +1,4 @@
+.flexdisplay {
+  display: flex;
+  flex-wrap: wrap;
+}
