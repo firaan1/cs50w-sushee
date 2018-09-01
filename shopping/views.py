@@ -32,36 +32,64 @@ def recently_added_dresses():
     return recently_added
 
 def incart_items(request):
-    items = DressOrder.objects.filter(user = request.user)
-    return len(items)
+    items = DressOrder.objects.filter(user = request.user, paid = False)
+    for item in items:
+        item.paid = True
+        item.save()
+    # PlacedOrder(user = request.user, )
+    return items
+
+def add_paid_orders(request):
+    items = incart_items(request)
+    return "test"
 
 # Create your views here.
 def index(request):
-    context = {"incart_items" : incart_items(request)}
+    context = {"incart_items" : len(incart_items(request))}
     # testing form
     if request.method == 'POST':
         files = request.FILES.getlist('files')
         for f in files:
             fileupload = Document(document = f)
             fileupload.save()
-        context = {"test" : fileupload.document.url,"incart_items" : incart_items(request)}
+        context = {"test" : fileupload.document.url,"incart_items" : len(incart_items(request))}
     else:
         pass
     return render(request, "shopping/index.html", context)
 
 def collections(request):
-    context = {"incart_items" : incart_items(request)}
+    context = {"incart_items" : len(incart_items(request))}
     return render(request, "shopping/collections.html", context)
 
+@login_required(login_url='/login')
 def histories(request):
-    pass
+    status = None
+    test = "none"
+    if request.method == "POST":
+        stripe.api_key = "sk_test_tSFhKEyCfNka1V4A71VZWbWc"
+        token = request.POST['stripeToken']
+        amount = request.POST['amount']
+        try:
+            charge = stripe.Charge.create( amount=int(amount), currency='inr', description='charge', source=token)
+            status = "success"
+            test = add_paid_orders(request);
+        except Exception as e:
+            status = str(e)
+    # paid_orders = PlacedOrder.objects.filter(user = request.user)
+    context = {
+    # "paid_orders" : paid_orders,
+    "status" : status,
+    "test" : test
+    }
+    return render(request, "shopping/histories.html", context)
 
+@login_required(login_url='/login')
 def cart(request):
     if request.method == "POST":
         orderpk = request.POST['orderpk']
         removeorder = DressOrder.objects.get(pk = orderpk)
         removeorder.delete()
-        return HttpResponseRedirect(reverse("cart")) 
+        return HttpResponseRedirect(reverse("cart"))
     userorders = DressOrder.objects.filter(user = request.user, paid = False).order_by('-pk')
     userorder_list = []
     total_cost = 0
@@ -78,9 +106,10 @@ def cart(request):
     }
     return render(request, "shopping/cart.html", context)
 
+@login_required(login_url='/login')
 def dressitem(request, dress_type, dress_id):
     if not dress_type in rate_dict.keys():
-        return render(request, "shopping/index.html", {"message" : "Unknown URL path", "incart_items" : incart_items(request)})
+        return render(request, "shopping/index.html", {"message" : "Unknown URL path", "incart_items" : len(incart_items(request))})
     try:
         dress = rate_dict[dress_type]['rate'].objects.get(pk = dress_id)
         dresssize = rate_dict[dress_type]['size'].objects.all()
@@ -92,7 +121,7 @@ def dressitem(request, dress_type, dress_id):
         "dresscolor_obj" : dresscolor_obj,
         "dresssize" : dresssize,
         "dress" : dress,
-        "incart_items" : incart_items(request)
+        "incart_items" : len(incart_items(request))
     }
     if request.method == "POST":
         todo = request.POST['todo']
@@ -105,9 +134,10 @@ def dressitem(request, dress_type, dress_id):
         elif todo == 'delete':
             deleteorder = DressOrder.objects.get(pk = dresspk)
             deleteorder.delete()
-        context["incart_items"] = incart_items(request)
+        context["incart_items"] = len(incart_items(request))
     return render(request, "shopping/dressitem.html", context)
 
+@login_required(login_url='/login')
 @user_passes_test(admin_check)
 def additems(request):
     context = {
@@ -150,7 +180,7 @@ def additems(request):
         return HttpResponseRedirect(reverse("additems"))
     # recently added
     context["recently_added"] = recently_added_dresses()
-    context["incart_items"] = incart_items(request)
+    context["incart_items"] = len(incart_items(request))
     return render(request, "shopping/additems.html", context)
 
 
@@ -163,7 +193,7 @@ def check_email(email):
 def login_view(request):
     if request.method == "GET":
         if request.user.is_authenticated:
-            return HttpResponseRedirect(reverse("index"))
+            return render(request, "shopping/index.html", {"message" : "User already logged in"})
         else:
             return render(request, "shopping/login.html", {"message" : None})
     else:

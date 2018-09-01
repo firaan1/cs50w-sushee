@@ -33,8 +33,45 @@ SuShee Fashionista
   <div>
     <h4>Total: {{currency}}{{total_cost}}<h4>
   </div>
+
+  <div>
+    <div class="form-group">
+      <label for="delivery_address">Deliver to:</label>
+      <select class="form-control" id="delivery_address">
+        <option value="" selected disabled>Select address</option>
+      </select>
+    </div>
+  </div>
+
+    <form action="{% url 'histories' %}" method="POST" class="makepayment">
+      {% csrf_token %}
+      <input name="amount" value="{% widthratio total_cost 1 100 %}" type="hidden">
+      <script id="payment"
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="pk_test_vM1JtHcRqfBiUB04mbPkFcJe"
+        data-amount="{% widthratio total_cost 1 100 %}"
+        data-currency="inr"
+        data-name="Stripe.com"
+        data-email="{{request.user.email}}"
+        data-description="Example charge"
+        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+        data-locale="auto"
+        data-allow-remember-me="false"
+        data-zip-code="false">
+      </script>
+    </form>
+
+    <div class="container">
+      <p>Please use one of the test <a href="https://stripe.com/docs/testing#cards">credit card numbers</a> in order to make payment.</p>
+      supply any valid expiry date and a dummy >=3digit cvv number.
+      <p>Dont use your credit card numbers. We will definitely steal from you.
+      *conditions apply</p>
+    </div>
+
   {% endif %}
 </div>
+
+
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
