@@ -33,15 +33,21 @@ def recently_added_dresses():
 
 def incart_items(request):
     items = DressOrder.objects.filter(user = request.user, paid = False)
-    for item in items:
-        item.paid = True
-        item.save()
-    # PlacedOrder(user = request.user, )
     return items
 
-def add_paid_orders(request):
-    items = incart_items(request)
-    return "test"
+def add_paid_orders(request,address_to_delivery):
+    try:
+        items = incart_items(request)
+        for item in items:
+            item.paid = True
+            item.save()
+        placedorder = PlacedOrder(user = request.user, deliveryaddress = DeliveryAddress.objects.get(pk = address_to_delivery))
+        placedorder.save()
+        placedorder.order.set(items)
+        placedorder.save()
+        return "success"
+    except:
+        return "failure"
 
 # Create your views here.
 def index(request):
@@ -64,31 +70,38 @@ def collections(request):
 @login_required(login_url='/login')
 def histories(request):
     status = None
-    test = "none"
     if request.method == "POST":
         stripe.api_key = "sk_test_tSFhKEyCfNka1V4A71VZWbWc"
         token = request.POST['stripeToken']
         amount = request.POST['amount']
+        address_to_delivery = request.POST['address_to_delivery']
         try:
             charge = stripe.Charge.create( amount=int(amount), currency='inr', description='charge', source=token)
             status = "success"
-            test = add_paid_orders(request);
+            add_paid_orders(request, address_to_delivery);
         except Exception as e:
             status = str(e)
-    # paid_orders = PlacedOrder.objects.filter(user = request.user)
+    placed_orders = PlacedOrder.objects.filter(user = request.user).order_by('-pk')
     context = {
-    # "paid_orders" : paid_orders,
-    "status" : status,
-    "test" : test
+    "rate_dict" : rate_dict,
+    "placed_orders" : placed_orders,
+    "status" : status
     }
     return render(request, "shopping/histories.html", context)
 
 @login_required(login_url='/login')
 def cart(request):
     if request.method == "POST":
-        orderpk = request.POST['orderpk']
-        removeorder = DressOrder.objects.get(pk = orderpk)
-        removeorder.delete()
+        todo = request.POST['todo']
+        if todo == "delete":
+            orderpk = request.POST['orderpk']
+            removeorder = DressOrder.objects.get(pk = orderpk)
+            removeorder.delete()
+        elif todo == "address":
+            new_address = request.POST['new_address']
+            new_number = request.POST['new_number']
+            address = DeliveryAddress(user = request.user, address = new_address, phone_number = new_number)
+            address.save()
         return HttpResponseRedirect(reverse("cart"))
     userorders = DressOrder.objects.filter(user = request.user, paid = False).order_by('-pk')
     userorder_list = []
@@ -100,6 +113,7 @@ def cart(request):
         userorder_list.append((order, size, orderpk))
         total_cost += order.price
     context = {
+        "deliveryaddress" : DeliveryAddress.objects.filter(user = request.user).order_by('-pk'),
         "total_cost" : total_cost,
         "currency" : rupees,
         "userorder_list" : userorder_list

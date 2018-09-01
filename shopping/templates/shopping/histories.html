@@ -6,8 +6,32 @@ SuShee Fashionista
 
 {% block body %}
 <hr>
-{{status}}
-{{test}}
+
+{% if success %}
+  {% if success == "success" %}
+    <h1>Payment Sucessful</h1>
+  {% else %}
+    <h1>Payment Failed</h1>
+    <p>{{sucess}}</p>
+  {% endif %}
+{% endif %}
+
+<div class="container">
+{% for placed_order in placed_orders %}
+  <div>
+    <h5>{{placed_order.datetime}}</h5>
+    <ul>
+      {% for order in placed_order.order.all %}
+        <li>{{order.dresstype}}</li>
+        <!-- {{rate_dict}} -->
+      {% endfor %}
+    </ul>
+    <p>Status: {{placed_order.status}}</p>
+{% empty %}
+    <li>No previous orders</li>
+{% endfor %}
+</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
   });

@@ -119,13 +119,14 @@ class DeliveryAddress(models.Model):
 
 class PlacedOrder(models.Model):
     STATUS = Choices(
-        (0, 'new', _('new')),
-        (1, 'in_progress', _('in_progress')),
-        (2, 'delivered', _('delivered'))
+        ('new', _('new')),
+        ('in_progress', _('in_progress')),
+        ('delivered', _('delivered'))
     )
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, related_name = "ordered_user")
     deliveryaddress = models.ForeignKey(DeliveryAddress, on_delete = models.SET_NULL, null = True, related_name = "delivery_address")
     order = models.ManyToManyField(DressOrder, related_name = "ordered_dress")
-    status = models.IntegerField(choices = STATUS, default = STATUS.new)
+    status = models.CharField(choices = STATUS, default = STATUS.new, max_length = 25)
+    datetime = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f"{self.status}"

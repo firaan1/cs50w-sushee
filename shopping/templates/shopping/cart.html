@@ -6,7 +6,6 @@ SuShee Fashionista
 
 {% block body %}
 <hr>
-
 <div class="container">
   {% for userorder, size, orderpk in userorder_list %}
     <div class="cart_dress_image">
@@ -24,6 +23,7 @@ SuShee Fashionista
     <form method="post">
       {% csrf_token %}
       <input type="hidden" name="orderpk" value="{{orderpk}}"/>
+      <input type="hidden" name="todo" value="delete"/>
       <button type="submit">Delete</button>
     </form>
   {% empty %}
@@ -38,14 +38,39 @@ SuShee Fashionista
     <div class="form-group">
       <label for="delivery_address">Deliver to:</label>
       <select class="form-control" id="delivery_address">
-        <option value="" selected disabled>Select address</option>
+        {% for d in deliveryaddress %}
+          {% if d == deliveryaddress.0 %}
+            <option value="{{d.pk}}" selected>{{d}}</option>
+          {% else %}
+            <option value="{{d.pk}}">{{d}}</option>
+          {% endif %}
+        {% endfor %}
       </select>
     </div>
+    <div class="form-group">
+      <button type="button" class="btn btn-default" id="add_new_address">+</button>
+    </div>
+    <form method="post" id="new_address_form">
+      {% csrf_token %}
+      <div class="form-group">
+        <textarea class="form-control" name="new_address" id="new_address" row="3" placeholder="Enter new address"></textarea>
+      </div>
+      <div class="form-group">
+        <input class="form-control" name="new_number" id="new_number" placeholder="+911234512345"/>
+      </div>
+      <div>
+        <span id="new_number_span"><span>
+      </div>
+      <input type="hidden" name="todo" value="address"/>
+      <button type="submit" id="submit_address">Add address</button>
+    </form>
   </div>
 
+  <div id="dmake_payment">
     <form action="{% url 'histories' %}" method="POST" class="makepayment">
       {% csrf_token %}
-      <input name="amount" value="{% widthratio total_cost 1 100 %}" type="hidden">
+      <input name="amount" value="{% widthratio total_cost 1 100 %}" type="hidden"/>
+      <input name="address_to_delivery" id="address_to_delivery" value="" type="hidden"/>
       <script id="payment"
         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
         data-key="pk_test_vM1JtHcRqfBiUB04mbPkFcJe"
@@ -67,7 +92,7 @@ SuShee Fashionista
       <p>Dont use your credit card numbers. We will definitely steal from you.
       *conditions apply</p>
     </div>
-
+  </div>
   {% endif %}
 </div>
 
@@ -75,7 +100,73 @@ SuShee Fashionista
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+
+    const new_address_form = document.querySelector('#new_address_form');
+    const dmake_payment = document.querySelector('#dmake_payment');
+    new_address_form.style.display = "none";
+    count = 0;
+    // address
+    document.querySelector('#add_new_address').onclick = () => {
+      if(count % 2 == 0){
+        document.querySelector('#add_new_address').innerHTML = "-";
+        new_address_form.style.display = "inline";
+      dmake_payment.style.display = "none";
+      } else {
+        document.querySelector('#add_new_address').innerHTML = "+";
+        new_address_form.style.display = "none";
+        dmake_payment.style.display = "block";
+      }
+      count += 1;
+    };
+
+    // phone number
+    const new_number = document.querySelector('#new_number');
+    const new_number_span = document.querySelector('#new_number_span');
+    const submit_address = document.querySelector('#submit_address');
+    const new_address = document.querySelector('#new_address');
+
+
+    new_number_span.innerHTML = "Please enter a valid address and phone number";
+    submit_address.disabled = true;
+
+    new_address.oninput = () => {
+      if(new_address.value.length > 0 && check_number(new_number.value)){
+        new_number_span.innerHTML = "";
+        submit_address.disabled = false;
+      } else {
+        new_number_span.innerHTML = "Please enter a valid address and phone number";
+        submit_address.disabled = true;
+      }
+    }
+
+    new_number.oninput = () => {
+      if(new_address.value.length > 0 && check_number(new_number.value)){
+        new_number_span.innerHTML = "";
+        submit_address.disabled = false;
+      } else {
+        new_number_span.innerHTML = "Please enter a valid address and phone number";
+        submit_address.disabled = true;
+      }
+    }
+
+    // address update
+    const delivery_address = document.querySelector('#delivery_address');
+    const address_to_delivery = document.querySelector('#address_to_delivery');
+    address_to_delivery.value = delivery_address.value;
+    delivery_address.onchange = () => {
+      address_to_delivery.value = delivery_address.value;
+    }
+
   });
+
+  function check_number(number){
+    var regex = /^[0-9+]+$/;
+    if(number.match(regex)){
+      return true;
+    } else {
+      return false;
+    }
+  }
 </script>
 
 {% endblock %}
