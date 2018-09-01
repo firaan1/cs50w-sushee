@@ -131,3 +131,13 @@ class PlacedOrder(models.Model):
     total = models.DecimalField(max_digits = 9, decimal_places = 2)
     def __str__(self):
         return f"status: {self.status}; total: {self.total}"
+
+class UserInput(models.Model):
+    user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, related_name = "input_user")
+    rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null = True)
+    review = models.CharField(max_length = 1000, null = True)
+    dresspk = models.IntegerField()
+    class Meta:
+        unique_together = ["user", "dresspk"]
+    def __str__(self):
+        return f"{self.rating}"

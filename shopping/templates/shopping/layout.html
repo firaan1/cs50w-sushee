@@ -34,7 +34,7 @@
           {% if request.user.id %}
             {% if incart_items > 0 %}
               <div>
-                <a href="{% url 'cart' %}"><span id="itemsincart">{{incart_items}} items in cart</span></a>
+                <a href="{% url 'cart' %}"><span id="itemsincart">{{incart_items}} item(s) in cart</span></a>
               <div>
             {% endif %}
           {% endif %}

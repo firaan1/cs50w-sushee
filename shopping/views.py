@@ -11,6 +11,8 @@ from django.core.serializers import serialize
 import json, stripe, datetime
 from .models import *
 from .forms import *
+from django.db.models import Avg, Count
+
 
 # admin check
 def admin_check(user):
@@ -22,6 +24,17 @@ rate_dict = {
     "trouser" : {"rate" : TrouserRate, "size" : TrouserSize },
     "saree" : {"rate" : SareeRate, "size" : SareeSize }
     }
+
+def sort_order(sort_by, order=None):
+    if order == "decreasing":
+        order_by = "-"
+    else:
+        order_by = ""
+    kurtarate = KurtaRate.objects.order_by(f"{order_by}{sort_by}")
+    toprate = TopRate.objects.order_by(f"{order_by}{sort_by}")
+    trouserrate = TrouserRate.objects.order_by(f"{order_by}{sort_by}")
+    sareerate = SareeRate.objects.order_by(f"{order_by}{sort_by}")
+    return kurtarate, toprate, trouserrate, sareerate
 
 def recently_added_dresses():
     recently_added = {}
@@ -66,7 +79,17 @@ def index(request):
     return render(request, "shopping/index.html", context)
 
 def collections(request):
-    context = {"incart_items" : len(incart_items(request))}
+    kurtarate = KurtaRate.objects.order_by('-pk')
+    toprate = TopRate.objects.order_by('-pk')
+    trouserrate = TrouserRate.objects.order_by('-pk')
+    sareerate = SareeRate.objects.order_by('-pk')
+    context = {
+    "kurtarate" : kurtarate,
+    "toprate" : toprate,
+    "trouserrate" : trouserrate,
+    "sareerate" : sareerate,
+    "incart_items" : len(incart_items(request))
+    }
     return render(request, "shopping/collections.html", context)
 
 @login_required(login_url='/login')
@@ -136,11 +159,11 @@ def dressitem(request, dress_type, dress_id):
     except:
         return render(request, "shopping/index.html", {"message" : "Requested item does not exist"})
     context = {
+        "range" : range(1,6),
         "currency" : rupees,
         "dresscolor_obj" : dresscolor_obj,
         "dresssize" : dresssize,
         "dress" : dress,
-        "incart_items" : len(incart_items(request))
     }
     if request.method == "POST":
         todo = request.POST['todo']
@@ -153,7 +176,23 @@ def dressitem(request, dress_type, dress_id):
         elif todo == 'delete':
             deleteorder = DressOrder.objects.get(pk = dresspk)
             deleteorder.delete()
-        context["incart_items"] = len(incart_items(request))
+        elif todo == "rate" or todo == "review":
+            try:
+                user_input = UserInput.objects.get(user = request.user, dresspk = dresspk)
+            except:
+                user_input = UserInput(user = request.user, dresspk = dresspk)
+                user_input.save()
+            if todo == "rate":
+                rating_input = request.POST['rating_input']
+                user_input.rating = rating_input
+            elif todo == "review":
+                review_input = request.POST['review_input']
+                user_input.review = review_input
+            user_input.save()
+    context["userinput"] = UserInput.objects.filter(dresspk = dress_id)
+    context["overall_rating"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Avg("rating"))
+    context["overall_rating_count"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Count("rating"))
+    context["incart_items"] = len(incart_items(request))
     return render(request, "shopping/dressitem.html", context)
 
 @login_required(login_url='/login')

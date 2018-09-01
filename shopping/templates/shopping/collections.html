@@ -6,8 +6,7 @@ SuShee Fashionista
 
 {% block body %}
 <hr>
-
-
+{{trouserrate}}
 <div class="container">
   <div>
     <a class="menubtn" id="kurta" href="#">Kurtas</a>
@@ -17,13 +16,15 @@ SuShee Fashionista
   </div>
 </div>
 
-<div class="container" id="dkurta">
+<div class="container flexdisplay" id="dkurta">
+  {%for kurta in kurtarate %}
+  {% endfor %}
 </div>
-<div class="container" id="dtop">
+<div class="container flexdisplay" id="dtop">
 </div>
-<div class="container" id="dtrouser">
+<div class="container flexdisplay" id="dtrouser">
 </div>
-<div class="container" id="dsaree">
+<div class="container flexdisplay" id="dsaree">
 </div>
 
 <script>
