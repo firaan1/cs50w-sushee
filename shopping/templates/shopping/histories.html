@@ -7,12 +7,12 @@ SuShee Fashionista
 {% block body %}
 <hr>
 
-{% if success %}
-  {% if success == "success" %}
+{% if status %}
+  {% if status == "success" %}
     <h1>Payment Sucessful</h1>
   {% else %}
     <h1>Payment Failed</h1>
-    <p>{{sucess}}</p>
+    <p>{{status}}</p>
   {% endif %}
 {% endif %}
 
@@ -20,13 +20,42 @@ SuShee Fashionista
 {% for placed_order in placed_orders %}
   <div>
     <h5>{{placed_order.datetime}}</h5>
-    <ul>
       {% for order in placed_order.order.all %}
-        <li>{{order.dresstype}}</li>
-        <!-- {{rate_dict}} -->
+
+        {% if order.dresstype == "kurta" %}
+          {% for kurta in kurtarate %}
+            {% if kurta.pk == order.dresspk %}
+              <a href="{% url 'dressitem' kurta.dresstype kurta.pk %}"><img src="{{kurta.image.first.document.url}}" /></a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if order.dresstype == "top" %}
+          {% for top in toprate %}
+            {% if top.pk == order.dresspk %}
+              <a href="{% url 'dressitem' top.dresstype top.pk %}"><img src="{{top.image.first.document.url}}" /></a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if order.dresstype == "trouser" %}
+          {% for trouser in trouserrate %}
+            {% if trouser.pk == order.dresspk %}
+              <a href="{% url 'dressitem' trouser.dresstype trouser.pk %}"><img src="{{trouser.image.first.document.url}}" /></a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if order.dresstype == "saree" %}
+          {% for saree in sareerate %}
+            {% if saree.pk == order.dresspk %}
+              <a href="{% url 'dressitem' saree.dresstype saree.pk %}"><img src="{{saree.image.first.document.url}}" /></a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       {% endfor %}
-    </ul>
     <p>Status: {{placed_order.status}}</p>
+    <p>Total: {{placed_order.total}}</p>
 {% empty %}
     <li>No previous orders</li>
 {% endfor %}

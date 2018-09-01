@@ -38,10 +38,12 @@ def incart_items(request):
 def add_paid_orders(request,address_to_delivery):
     try:
         items = incart_items(request)
+        total_cost = 0
         for item in items:
             item.paid = True
             item.save()
-        placedorder = PlacedOrder(user = request.user, deliveryaddress = DeliveryAddress.objects.get(pk = address_to_delivery))
+            total_cost += rate_dict[item.dresstype]['rate'].objects.get(pk = item.dresspk).price
+        placedorder = PlacedOrder(user = request.user, deliveryaddress = DeliveryAddress.objects.get(pk = address_to_delivery), total = total_cost)
         placedorder.save()
         placedorder.order.set(items)
         placedorder.save()
@@ -83,7 +85,10 @@ def histories(request):
             status = str(e)
     placed_orders = PlacedOrder.objects.filter(user = request.user).order_by('-pk')
     context = {
-    "rate_dict" : rate_dict,
+    "kurtarate" : rate_dict['kurta']['rate'].objects.all(),
+    "toprate" : rate_dict['top']['rate'].objects.all(),
+    "trouserrate" : rate_dict['trouser']['rate'].objects.all(),
+    "sareerate" : rate_dict['saree']['rate'].objects.all(),
     "placed_orders" : placed_orders,
     "status" : status
     }

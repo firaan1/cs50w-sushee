@@ -106,7 +106,7 @@ class DressOrder(models.Model):
     sizepk = models.IntegerField()
     paid = models.BooleanField(default = False)
     def __str__(self):
-        return f"{self.dresstype} {self.dresspk}"
+        return f"{self.dresstype}"
 
 class DeliveryAddress(models.Model):
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, related_name = "address_user")
@@ -128,5 +128,6 @@ class PlacedOrder(models.Model):
     order = models.ManyToManyField(DressOrder, related_name = "ordered_dress")
     status = models.CharField(choices = STATUS, default = STATUS.new, max_length = 25)
     datetime = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(max_digits = 9, decimal_places = 2)
     def __str__(self):
-        return f"{self.status}"
+        return f"status: {self.status}; total: {self.total}"

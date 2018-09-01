@@ -9,7 +9,7 @@ SuShee Fashionista
 <div class="container">
   {% for userorder, size, orderpk in userorder_list %}
     <div class="cart_dress_image">
-      <img src="{{userorder.image.first.document.url}}" alt="{{userorder.image.first}}"/>
+      <a href="{% url 'dressitem' userorder.dresstype userorder.pk %}"><img src="{{userorder.image.first.document.url}}" alt="{{userorder.image.first}}"/></a>
     </div>
     <div class="cart_dress_name">
       {{userorder.name}}
@@ -101,6 +101,8 @@ SuShee Fashionista
 <script>
   document.addEventListener('DOMContentLoaded', () => {
 
+    if("{{ userorder_list }}" != "[]"){
+
     const new_address_form = document.querySelector('#new_address_form');
     const dmake_payment = document.querySelector('#dmake_payment');
     new_address_form.style.display = "none";
@@ -157,6 +159,7 @@ SuShee Fashionista
       address_to_delivery.value = delivery_address.value;
     }
 
+  }
   });
 
   function check_number(number){
