@@ -1,0 +1,44 @@
+{% extends "shopping/layout.html" %}
+
+{% block title %}
+SuShee Fashionista
+{% endblock %}
+
+{% block body %}
+<hr>
+
+<div class="container">
+  {% for userorder, size, orderpk in userorder_list %}
+    <div class="cart_dress_image">
+      <img src="{{userorder.image.first.document.url}}" alt="{{userorder.image.first}}"/>
+    </div>
+    <div class="cart_dress_name">
+      {{userorder.name}}
+    </div>
+    <div class="cart_dress_size">
+      {{size}}
+    </div>
+    <div class="cart_dress_price">
+      {{currency}}{{userorder.price}}
+    </div>
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="orderpk" value="{{orderpk}}"/>
+      <button type="submit">Delete</button>
+    </form>
+  {% empty %}
+    <h4>No items in cart</h4>
+  {% endfor %}
+  {% if userorder_list %}
+  <div>
+    <h4>Total: {{currency}}{{total_cost}}<h4>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  });
+</script>
+
+{% endblock %}

@@ -31,27 +31,56 @@ def recently_added_dresses():
     recently_added["saree"] = json.loads(serialize("json",SareeRate.objects.order_by('-pk')[:4]))
     return recently_added
 
+def incart_items(request):
+    items = DressOrder.objects.filter(user = request.user)
+    return len(items)
+
 # Create your views here.
 def index(request):
-    context = {}
+    context = {"incart_items" : incart_items(request)}
     # testing form
     if request.method == 'POST':
         files = request.FILES.getlist('files')
         for f in files:
             fileupload = Document(document = f)
             fileupload.save()
-        context = {"test" : fileupload.document.url}
+        context = {"test" : fileupload.document.url,"incart_items" : incart_items(request)}
     else:
         pass
     return render(request, "shopping/index.html", context)
 
-def order(request):
-    context = {}
-    return render(request, "shopping/order.html", context)
+def collections(request):
+    context = {"incart_items" : incart_items(request)}
+    return render(request, "shopping/collections.html", context)
+
+def histories(request):
+    pass
+
+def cart(request):
+    if request.method == "POST":
+        orderpk = request.POST['orderpk']
+        removeorder = DressOrder.objects.get(pk = orderpk)
+        removeorder.delete()
+        return HttpResponseRedirect(reverse("cart")) 
+    userorders = DressOrder.objects.filter(user = request.user, paid = False).order_by('-pk')
+    userorder_list = []
+    total_cost = 0
+    for userorder in userorders:
+        order = rate_dict[userorder.dresstype]['rate'].objects.get(pk = userorder.dresspk)
+        size = rate_dict[userorder.dresstype]['size'].objects.get(pk = userorder.sizepk)
+        orderpk = userorder.pk
+        userorder_list.append((order, size, orderpk))
+        total_cost += order.price
+    context = {
+        "total_cost" : total_cost,
+        "currency" : rupees,
+        "userorder_list" : userorder_list
+    }
+    return render(request, "shopping/cart.html", context)
 
 def dressitem(request, dress_type, dress_id):
     if not dress_type in rate_dict.keys():
-        return render(request, "shopping/index.html", {"message" : "Unknown URL path"})
+        return render(request, "shopping/index.html", {"message" : "Unknown URL path", "incart_items" : incart_items(request)})
     try:
         dress = rate_dict[dress_type]['rate'].objects.get(pk = dress_id)
         dresssize = rate_dict[dress_type]['size'].objects.all()
@@ -62,8 +91,21 @@ def dressitem(request, dress_type, dress_id):
         "currency" : rupees,
         "dresscolor_obj" : dresscolor_obj,
         "dresssize" : dresssize,
-        "dress" : dress
+        "dress" : dress,
+        "incart_items" : incart_items(request)
     }
+    if request.method == "POST":
+        todo = request.POST['todo']
+        dresspk = request.POST['dresspk']
+        if todo == 'add':
+            dresstype = request.POST['dresstype']
+            sizepk = request.POST['sizepk']
+            addorder = DressOrder(user = request.user, dresstype = dresstype, dresspk = dresspk, sizepk = sizepk)
+            addorder.save()
+        elif todo == 'delete':
+            deleteorder = DressOrder.objects.get(pk = dresspk)
+            deleteorder.delete()
+        context["incart_items"] = incart_items(request)
     return render(request, "shopping/dressitem.html", context)
 
 @user_passes_test(admin_check)
@@ -108,46 +150,9 @@ def additems(request):
         return HttpResponseRedirect(reverse("additems"))
     # recently added
     context["recently_added"] = recently_added_dresses()
+    context["incart_items"] = incart_items(request)
     return render(request, "shopping/additems.html", context)
 
-def model_form_upload(request):
-    # Handle file upload
-    if request.method == 'POST':
-        form = DocumentForm2(request.POST, request.FILES)
-        if form.is_valid():
-            newdoc = Document(document = request.FILES['docfile'])
-            newdoc.save()
-
-            # Redirect to the document list after POST
-            # return HttpResponseRedirect(reverse('model_form_upload'))
-            context = {"test" : newdoc.document.url}
-            return render(request, "shopping/index.html", context)
-    else:
-        form = DocumentForm() # A empty, unbound form
-
-    # Load documents for the list page
-    documents = Document.objects.all()
-
-    # Render list page with the documents and the form
-    return render(request,
-        'shopping/model_form_upload.html',
-        {'documents': documents, 'form': form})
-
-
-
-# file upload
-# def model_form_upload(request):
-#     if request.method == 'POST':
-#         form = DocumentForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             context = {"message" : "upload successful", "form" : form}
-#         else:
-#             context = {"message" : "upload failed", "form" : form}
-#     else:
-#         form = DocumentForm()
-#         context = {"message" : None, "form" : form}
-#     return render(request, "shopping/index.html", context)
 
 # login/registration
 # check email function
