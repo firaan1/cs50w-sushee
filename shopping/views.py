@@ -173,10 +173,10 @@ def dressitem(request, dress_type, dress_id):
             sizepk = request.POST['sizepk']
             addorder = DressOrder(user = request.user, dresstype = dresstype, dresspk = dresspk, sizepk = sizepk)
             addorder.save()
-        elif todo == 'delete':
-            deleteorder = DressOrder.objects.get(pk = dresspk)
-            deleteorder.delete()
-        elif todo == "rate" or todo == "review":
+        # elif todo == 'delete':
+        #     deleteorder = DressOrder.objects.get(pk = dresspk)
+        #     deleteorder.delete()
+        else:
             try:
                 user_input = UserInput.objects.get(user = request.user, dresspk = dresspk)
             except:
@@ -186,11 +186,13 @@ def dressitem(request, dress_type, dress_id):
                 rating_input = request.POST['rating_input']
                 user_input.rating = rating_input
             elif todo == "review":
-                review_input = request.POST['review_input']
+                review_input = request.POST['reviewinput']
                 user_input.review = review_input
+            elif todo == "delete_review":
+                user_input.review = None
             user_input.save()
-    context["currentuserinput"] = UserInput.objects.get(dresspk = dress_id, user = request.user).order_by('-pk')
-    context["userinput"] = UserInput.objects.filter(dresspk = dress_id)
+    context["currentuserinput"] = UserInput.objects.get(dresspk = dress_id, user = request.user)
+    context["userinput"] = UserInput.objects.filter(dresspk = dress_id).order_by('-pk')
     context["overall_rating"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Avg("rating"))
     context["overall_rating_count"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Count("rating"))
     context["incart_items"] = len(incart_items(request))

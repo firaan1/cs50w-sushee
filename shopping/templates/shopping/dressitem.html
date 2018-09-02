@@ -96,9 +96,36 @@ SuShee Fashionista
     <h3>Review</h3>
     {% if currentuserinput.review %}
       <p>{{currentuserinput.review}}</p>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+        <input type="hidden" name="todo" value="delete_review"/>
+        <button type="submit" class="btn btn-default">Delete Review</button>
+      </form>
     {% else %}
-      
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-check">
+          <textarea name="reviewinput" id="reviewinput" row="5" value="" placeholder="Enter your review here"></textarea>
+          <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+          <input type="hidden" name="todo" value="review"/>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+      </form>
     {% endif %}
+
+    <div>
+      <ul>
+      {% for u in userinput %}
+       {% if u.review %}
+        <li>{{u.user.username}}: {{u.review}}</li>
+       {% endif %}
+      {% endfor %}
+      </ul>
+    </div>
+
   </div>
 
 </div>

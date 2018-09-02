@@ -137,7 +137,6 @@ class UserInput(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null = True)
     review = models.CharField(max_length = 1000, null = True)
     dresspk = models.IntegerField()
-    datetime = models.DateTimeField(auto_now_add=True)
     class Meta:
         unique_together = ["user", "dresspk"]
     def __str__(self):
