@@ -32,10 +32,11 @@
           {% endif %}
 
           {% if request.user.id %}
+            <div>{{request.user.username}}</div>
             {% if incart_items > 0 %}
               <div>
                 <a href="{% url 'cart' %}"><span id="itemsincart">{{incart_items}} item(s) in cart</span></a>
-              <div>
+              </div>
             {% endif %}
           {% endif %}
         </div>

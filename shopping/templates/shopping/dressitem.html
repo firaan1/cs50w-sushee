@@ -87,12 +87,18 @@ SuShee Fashionista
       <button type="submit" class="btn btn-default">Rate</button>
     </form>
 
-    <p>Your rating: {% for u in userinput %}{% if u.user == request.user %}{{u.rating}}{% endif %}{% empty %}-{% endfor %} / 5</p>
+    <p>Your rating: {{currentuserinput.rating}} / 5</p>
     <p>Overall rating: {{overall_rating.rating__avg|default:"-"}} / 5.0 ({{overall_rating_count.rating__count}} users) </p>
   </div>
 
   <!-- review -->
-  <div>
+  <div class="container">
+    <h3>Review</h3>
+    {% if currentuserinput.review %}
+      <p>{{currentuserinput.review}}</p>
+    {% else %}
+      
+    {% endif %}
   </div>
 
 </div>

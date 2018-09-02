@@ -189,6 +189,7 @@ def dressitem(request, dress_type, dress_id):
                 review_input = request.POST['review_input']
                 user_input.review = review_input
             user_input.save()
+    context["currentuserinput"] = UserInput.objects.get(dresspk = dress_id, user = request.user).order_by('-pk')
     context["userinput"] = UserInput.objects.filter(dresspk = dress_id)
     context["overall_rating"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Avg("rating"))
     context["overall_rating_count"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Count("rating"))
