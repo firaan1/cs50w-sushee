@@ -6,18 +6,10 @@ SuShee Fashionista
 
 {% block body %}
 <hr>
-{% if message %}{{message}}{% endif %}
-
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <input name="files" type="file" size="50" accept="image/*" multiple>
-  <button type="submit">Upload</button>
-</form>
-
-{% if test %}
-  <p>File uploaded at: <a href="{{ test }}"><img src="{{ test }}" alt="{{ test }}"></a></p>
-{% endif %}
-
+<h1>SuShee Fashionista</h1>
+<ul>
+  <li>Buy kurtas, tops, trousers and sarees online</li>
+</ul>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
   });

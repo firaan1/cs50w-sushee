@@ -25,15 +25,11 @@ rate_dict = {
     "saree" : {"rate" : SareeRate, "size" : SareeSize }
     }
 
-def sort_order(sort_by, order=None):
-    if order == "decreasing":
-        order_by = "-"
-    else:
-        order_by = ""
-    kurtarate = KurtaRate.objects.order_by(f"{order_by}{sort_by}")
-    toprate = TopRate.objects.order_by(f"{order_by}{sort_by}")
-    trouserrate = TrouserRate.objects.order_by(f"{order_by}{sort_by}")
-    sareerate = SareeRate.objects.order_by(f"{order_by}{sort_by}")
+def sort_order(sort):
+    kurtarate = KurtaRate.objects.order_by(sort)
+    toprate = TopRate.objects.order_by(sort)
+    trouserrate = TrouserRate.objects.order_by(sort)
+    sareerate = SareeRate.objects.order_by(sort)
     return kurtarate, toprate, trouserrate, sareerate
 
 def recently_added_dresses():
@@ -79,16 +75,21 @@ def index(request):
     return render(request, "shopping/index.html", context)
 
 def collections(request):
-    kurtarate = KurtaRate.objects.order_by('-pk')
-    toprate = TopRate.objects.order_by('-pk')
-    trouserrate = TrouserRate.objects.order_by('-pk')
-    sareerate = SareeRate.objects.order_by('-pk')
+    sort = '-pk'
+    if request.method == "POST":
+        sort = request.POST['sortinput']
+    kurtarate, toprate, trouserrate, sareerate = sort_order(sort)
+    if request.user.id:
+        incart_item = len(incart_items(request))
+    else:
+        incart_item = None
     context = {
+    "currency" : rupees,
     "kurtarate" : kurtarate,
     "toprate" : toprate,
     "trouserrate" : trouserrate,
     "sareerate" : sareerate,
-    "incart_items" : len(incart_items(request))
+    "incart_items" : incart_item
     }
     return render(request, "shopping/collections.html", context)
 
@@ -191,7 +192,7 @@ def dressitem(request, dress_type, dress_id):
             elif todo == "delete_review":
                 user_input.review = None
             user_input.save()
-    context["currentuserinput"] = UserInput.objects.get(dresspk = dress_id, user = request.user)
+    context["currentuserinput"] = UserInput.objects.filter(dresspk = dress_id, user = request.user).first()
     context["userinput"] = UserInput.objects.filter(dresspk = dress_id).order_by('-pk')
     context["overall_rating"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Avg("rating"))
     context["overall_rating_count"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Count("rating"))

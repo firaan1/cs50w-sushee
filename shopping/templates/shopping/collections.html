@@ -6,29 +6,97 @@ SuShee Fashionista
 
 {% block body %}
 <hr>
-{{trouserrate}}
 <div class="container">
   <div>
-    <a class="menubtn" id="kurta" href="#">Kurtas</a>
-    <a class="menubtn" id="top" href="#">Tops</a>
-    <a class="menubtn" id="trouser" href="#">Trousers</a>
-    <a class="menubtn" id="saree" href="#">Sarees</a>
+    <a class="dressbtn" id="kurta" href="#">Kurtas</a>
+    <a class="dressbtn" id="top" href="#">Tops</a>
+    <a class="dressbtn" id="trouser" href="#">Trousers</a>
+    <a class="dressbtn" id="saree" href="#">Sarees</a>
   </div>
 </div>
 
-<div class="container flexdisplay" id="dkurta">
-  {%for kurta in kurtarate %}
+<!-- <div class="container">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <select class="form-control" id="sortinput" name="sortinput">
+        <option value="-pk">Arrival: New</option>
+        <option value="pk">Arrival: Old</option>
+        <option value="-price">Price: Cheap</option>
+        <option value="price">Price: Expensive</option>
+        <option value="-rating">Rating: High</option>
+        <option value="rating">Rating: Low</option>
+      </select>
+    </div>
+    <button type="submit">Sort</button>
+  </form>
+</div> -->
+
+<div class="container flexdisplay dressitems" id="dkurta">
+  {%for d in kurtarate %}
+    <div>
+      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
+      <br>
+      <p>
+        <span class="rdressname">{{d.name}}</span>
+        <span class="rdressprice">({{currency}}{{d.price}})</span>
+      </p>
+    </div>
   {% endfor %}
 </div>
-<div class="container flexdisplay" id="dtop">
+<div class="container flexdisplay dressitems" id="dtop">
+  {%for d in toprate %}
+    <div>
+      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
+      <br>
+      <p>
+        <span class="rdressname">{{d.name}}</span>
+        <span class="rdressprice">({{currency}}{{d.price}})</span>
+      </p>
+    </div>
+  {% endfor %}
 </div>
-<div class="container flexdisplay" id="dtrouser">
+<div class="container flexdisplay dressitems" id="dtrouser">
+  {%for d in trouserrate %}
+    <div>
+      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
+      <br>
+      <p>
+        <span class="rdressname">{{d.name}}</span>
+        <span class="rdressprice">({{currency}}{{d.price}})</span>
+      </p>
+    </div>
+  {% endfor %}
 </div>
-<div class="container flexdisplay" id="dsaree">
+<div class="container flexdisplay dressitems" id="dsaree">
+  {%for d in sareerate %}
+    <div>
+      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
+      <br>
+      <p>
+        <span class="rdressname">{{d.name}}</span>
+        <span class="rdressprice">({{currency}}{{d.price}})</span>
+      </p>
+    </div>
+  {% endfor %}
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+
+    const dressitems = document.querySelectorAll('.dressitems');
+
+    dressitems.forEach(item => {item.style.display = "none";});
+
+    document.querySelector('#dkurta').style.display = "flex";
+
+    document.querySelectorAll('.dressbtn').forEach(button => {
+      button.onclick = () => {
+        dressitems.forEach(item => {item.style.display = "none";});
+        document.querySelector('#d' + button.id).style.display = "flex";
+      }
+    });
+
   });
 </script>
 

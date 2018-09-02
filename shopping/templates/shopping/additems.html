@@ -10,10 +10,10 @@ SuShee Fashionista
 
 <div class="container">
   <div>
-    <a class="menubtn" id="kurta" href="#">Kurtas</a>
-    <a class="menubtn" id="top" href="#">Tops</a>
-    <a class="menubtn" id="trouser" href="#">Trousers</a>
-    <a class="menubtn" id="saree" href="#">Sarees</a>
+    <a class="dressbtn" id="kurta" href="#">Kurtas</a>
+    <a class="dressbtn" id="top" href="#">Tops</a>
+    <a class="dressbtn" id="trouser" href="#">Trousers</a>
+    <a class="dressbtn" id="saree" href="#">Sarees</a>
   </div>
 </div>
 
@@ -137,7 +137,7 @@ SuShee Fashionista
     recent_template = Handlebars.compile(document.querySelector('#recent_template').innerHTML);
 
     // dress anchors
-    document.querySelectorAll('.menubtn').forEach(anchor => {
+    document.querySelectorAll('.dressbtn').forEach(anchor => {
       const anchor_div = document.querySelector('#d' + anchor.id);
       anchor_div.style.display = "none";
       anchor.onclick = () => {
@@ -168,7 +168,7 @@ SuShee Fashionista
         add_dress(dresstype, dressobj_dict);
 
         // removing divs
-        document.querySelectorAll('.menubtn').forEach(item => {
+        document.querySelectorAll('.dressbtn').forEach(item => {
           document.querySelector('#d' + item.id).style.display = "none";
         });
         anchor_div.style.display = "block";
