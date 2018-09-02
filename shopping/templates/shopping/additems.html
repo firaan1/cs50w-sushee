@@ -20,6 +20,7 @@ SuShee Fashionista
 <div class="container">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    <input type="hidden" name="todo" value="additem"/>
     <div class="container" id="dkurta">
     </div>
     <div class="container" id="dtop">
@@ -181,6 +182,7 @@ SuShee Fashionista
     document.querySelectorAll('.recentdiv').forEach(item => {
       item.innerHTML += recent_template({"dresstype" : item.dataset.dresstype, "dressdata" : recently_added[item.dataset.dresstype], "image" : image});
     });
+
   });
   // end of contentloaded
 
@@ -244,6 +246,10 @@ SuShee Fashionista
 
     // multiple size input
     dresssize.multiple = true;
+    if(dresssize.dataset.dresstype === "saree"){
+      dresssize.multiple = false;
+      dresssize.selectedIndex = 1;
+    }
     dresssizeinput.parentElement.style.display = "none";
     [dressname, dressmodel, dresssize, dresscolor, dressimage, dressprice].forEach(event => {
       event.oninput = () => {

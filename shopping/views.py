@@ -77,7 +77,14 @@ def index(request):
 def collections(request):
     sort = '-pk'
     if request.method == "POST":
-        sort = request.POST['sortinput']
+        todo = request.POST['todo']
+        if todo == "sort":
+            sort = request.POST['sortinput']
+        elif todo == "deleteitem":
+            dresspk = request.POST['dresspk']
+            dresstype = request.POST['dresstype']
+            dress = rate_dict[dresstype]['rate'].objects.get(pk = dresspk)
+            dress.delete()
     kurtarate, toprate, trouserrate, sareerate = sort_order(sort)
     if request.user.id:
         incart_item = len(incart_items(request))
@@ -169,19 +176,24 @@ def dressitem(request, dress_type, dress_id):
     if request.method == "POST":
         todo = request.POST['todo']
         dresspk = request.POST['dresspk']
+        dresstype = request.POST['dresstype']
         if todo == 'add':
-            dresstype = request.POST['dresstype']
             sizepk = request.POST['sizepk']
             addorder = DressOrder(user = request.user, dresstype = dresstype, dresspk = dresspk, sizepk = sizepk)
             addorder.save()
-        # elif todo == 'delete':
-        #     deleteorder = DressOrder.objects.get(pk = dresspk)
-        #     deleteorder.delete()
+        elif todo == 'deleteitem':
+            dress = rate_dict[dresstype]['rate'].objects.get(pk = dresspk)
+            dress.delete()
+            return HttpResponseRedirect(reverse("collections"))
         else:
+            x=0
             try:
-                user_input = UserInput.objects.get(user = request.user, dresspk = dresspk)
+                user_input = UserInput.objects.filter(user = request.user, dresspk = dresspk, dresstype = dresstype).first()
+                if not user_input:
+                    x=1
+                    raise ValueError
             except:
-                user_input = UserInput(user = request.user, dresspk = dresspk)
+                user_input = UserInput(user = request.user, dresspk = dresspk, dresstype = dresstype)
                 user_input.save()
             if todo == "rate":
                 rating_input = request.POST['rating_input']
@@ -212,33 +224,35 @@ def additems(request):
         "kurtasize" : serialize("json", KurtaSize.objects.get_queryset())
     }
     if request.method == "POST":
-        dresstype = request.POST['dresstype']
-        dressname = request.POST[f"t_{dresstype}name"]
-        dressmodel = request.POST[f"t_{dresstype}model"]
-        # dresssize = request.POST[f"{dresstype}size"]
-        dresssize = request.POST[f"t_{dresstype}size"]
-        dresssize = dresssize.split(",")
-        dresscolor = request.POST[f"{dresstype}color"]
-        dressprice = request.POST[f"p_{dresstype}"]
-        images = request.FILES.getlist(f"i_{dresstype}image")
-        uploaded_images = []
-        for i in images:
-            upload = Document(document = i, color = Color.objects.get(code = dresscolor))
-            upload.save()
-            uploaded_images.append(upload)
-        # return HttpResponse(str(uploaded_images))
-        # adding to rate ORM
-        dressrate_obj = rate_dict[dresstype]['rate']
-        dresssize_obj = rate_dict[dresstype]['size']
-        dresssize_list = [dresssize_obj.objects.get(pk = d) for d in dresssize]
-        dress = dressrate_obj(name = dressname, model = dressmodel, price = dressprice)
-        dress.save()
-        if dresssize_list:
-            dress.size.set(dresssize_list)
+        todo = request.POST['todo']
+        if todo == "additem":
+            dresstype = request.POST['dresstype']
+            dressname = request.POST[f"t_{dresstype}name"]
+            dressmodel = request.POST[f"t_{dresstype}model"]
+            # dresssize = request.POST[f"{dresstype}size"]
+            dresssize = request.POST[f"t_{dresstype}size"]
+            dresssize = dresssize.split(",")
+            dresscolor = request.POST[f"{dresstype}color"]
+            dressprice = request.POST[f"p_{dresstype}"]
+            images = request.FILES.getlist(f"i_{dresstype}image")
+            uploaded_images = []
+            for i in images:
+                upload = Document(document = i, color = Color.objects.get(code = dresscolor))
+                upload.save()
+                uploaded_images.append(upload)
+            # return HttpResponse(str(uploaded_images))
+            # adding to rate ORM
+            dressrate_obj = rate_dict[dresstype]['rate']
+            dresssize_obj = rate_dict[dresstype]['size']
+            dresssize_list = [dresssize_obj.objects.get(pk = d) for d in dresssize]
+            dress = dressrate_obj(name = dressname, model = dressmodel, price = dressprice)
             dress.save()
-        if uploaded_images:
-            dress.image.set(uploaded_images)
-            dress.save()
+            if dresssize_list:
+                dress.size.set(dresssize_list)
+                dress.save()
+            if uploaded_images:
+                dress.image.set(uploaded_images)
+                dress.save()
         return HttpResponseRedirect(reverse("additems"))
     # recently added
     context["recently_added"] = recently_added_dresses()

@@ -136,8 +136,9 @@ class UserInput(models.Model):
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, related_name = "input_user")
     rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], null = True)
     review = models.CharField(max_length = 1000, null = True)
+    dresstype = models.CharField(max_length = 25)
     dresspk = models.IntegerField()
     class Meta:
-        unique_together = ["user", "dresspk"]
+        unique_together = ["user", "dresstype", "dresspk"]
     def __str__(self):
         return f"{self.rating}"

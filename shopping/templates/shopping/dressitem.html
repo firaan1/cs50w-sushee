@@ -12,6 +12,15 @@ SuShee Fashionista
   <div>
     <h3>Name (Model)</h3>{{dress.name}} ({{dress.model}})
   </div>
+  {% if request.user.is_staff %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="todo" value="deleteitem"/>
+    <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+    <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+    <button type="submit">Delete</button>
+  </form>
+  {% endif %}
   <!-- image -->
   <div id="ind_images">
     <h3>Images</h3>
@@ -82,6 +91,7 @@ SuShee Fashionista
         </div>
       {% endfor %}
       <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+      <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
       <input type="hidden" name="todo" value="rate"/>
       <input type="hidden" name="rating_input" id="rating_input" value=""/>
       <button type="submit" class="btn btn-default">Rate</button>
@@ -99,6 +109,7 @@ SuShee Fashionista
       <form method="post">
         {% csrf_token %}
         <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+        <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
         <input type="hidden" name="todo" value="delete_review"/>
         <button type="submit" class="btn btn-default">Delete Review</button>
       </form>
@@ -107,6 +118,7 @@ SuShee Fashionista
         {% csrf_token %}
         <div class="form-check">
           <textarea name="reviewinput" id="reviewinput" row="5" value="" placeholder="Enter your review here"></textarea>
+          <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
           <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
           <input type="hidden" name="todo" value="review"/>
         </div>
