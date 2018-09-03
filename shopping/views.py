@@ -41,7 +41,10 @@ def recently_added_dresses():
     return recently_added
 
 def incart_items(request):
-    items = DressOrder.objects.filter(user = request.user, paid = False)
+    try:
+        items = DressOrder.objects.filter(user = request.user, paid = False)
+    except:
+        items = []
     return items
 
 def add_paid_orders(request,address_to_delivery):
@@ -143,9 +146,12 @@ def cart(request):
     userorder_list = []
     total_cost = 0
     for userorder in userorders:
-        order = rate_dict[userorder.dresstype]['rate'].objects.get(pk = userorder.dresspk)
-        size = rate_dict[userorder.dresstype]['size'].objects.get(pk = userorder.sizepk)
-        orderpk = userorder.pk
+        try:
+            order = rate_dict[userorder.dresstype]['rate'].objects.get(pk = userorder.dresspk)
+            size = rate_dict[userorder.dresstype]['size'].objects.get(pk = userorder.sizepk)
+            orderpk = userorder.pk
+        except:
+            continue
         userorder_list.append((order, size, orderpk))
         total_cost += order.price
     context = {
