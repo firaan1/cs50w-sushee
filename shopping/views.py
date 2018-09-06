@@ -203,7 +203,7 @@ def dressitem(request, dress_type, dress_id):
                 user_input.save()
             if todo == "rate":
                 rating_input = request.POST['rating_input']
-                user_input.rating = rating_input
+                user_input.rating = int(rating_input)
             elif todo == "review":
                 review_input = request.POST['reviewinput']
                 user_input.review = review_input

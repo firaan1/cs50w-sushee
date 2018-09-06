@@ -6,15 +6,142 @@ SuShee Fashionista
 
 {% block body %}
 <hr>
-<div class="container">
+<!-- <div class="container">
   <div>
     <a class="dressbtn" id="kurta" href="#">Kurtas</a>
     <a class="dressbtn" id="top" href="#">Tops</a>
     <a class="dressbtn" id="trouser" href="#">Trousers</a>
     <a class="dressbtn" id="saree" href="#">Sarees</a>
   </div>
-</div>
+</div> -->
+<div class="container" style="margin-top:30px">
+  <div class="row">
+    <div class="col-sm-3 side-menu">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link dressbtn"id="kurta" href="#">Kurtas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dressbtn" id="top" href="#">Tops</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dressbtn" id="trouser" href="#">Trousers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dressbtn" id="saree" href="#">Sarees</a>
+        </li>
+      </ul>
+      <hr class="d-sm-none">
+    </div>
+    <div class="col-sm-9">
+      <div class="container flexdisplay dressitems" id="dkurta">
+        {%for d in kurtarate %}
+          <div class="row">
+            <div class="col-sm-8">
+              <a href="/{{d.dresstype}}/{{d.pk}}">
+                <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+              <br>
+              <p>
+                <span class="rdressname">{{d.name}}</span>
+                <span class="rdressprice">({{currency}}{{d.price}})</span>
+              </p>
+           </div>
 
+            {% if request.user.is_staff %}
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+              <input type="hidden" name="todo" value="deleteitem"/>
+              <button type="submit">Delete</button>
+            </form>
+            {% endif %}
+          </div>
+          {% empty %}
+            <p>No kurtas available</p>
+        {% endfor %}
+      </div>
+      <div class="container flexdisplay dressitems" id="dtop">
+        {%for d in toprate %}
+        <div class="row">
+          <div class="col-sm-8">
+            <a href="/{{d.dresstype}}/{{d.pk}}">
+              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+            <br>
+            <p>
+              <span class="rdressname">{{d.name}}</span>
+              <span class="rdressprice">({{currency}}{{d.price}})</span>
+            </p>
+          </div>
+            {% if request.user.is_staff %}
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+              <input type="hidden" name="todo" value="deleteitem"/>
+              <button type="submit">Delete</button>
+            </form>
+            {% endif %}
+          </div>
+          {% empty %}
+            <p>No tops available</p>
+        {% endfor %}
+      </div>
+      <div class="container flexdisplay dressitems" id="dtrouser">
+        {%for d in trouserrate %}
+        <div class="row">
+          <div class="col-sm-8">
+            <a href="/{{d.dresstype}}/{{d.pk}}">
+              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+            <br>
+            <p>
+              <span class="rdressname">{{d.name}}</span>
+              <span class="rdressprice">({{currency}}{{d.price}})</span>
+            </p>
+          </div>
+            {% if request.user.is_staff %}
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+              <input type="hidden" name="todo" value="deleteitem"/>
+              <button type="submit">Delete</button>
+            </form>
+            {% endif %}
+          </div>
+          {% empty %}
+            <p>No trousers available</p>
+        {% endfor %}
+      </div>
+      <div class="container flexdisplay dressitems" id="dsaree">
+        {%for d in sareerate %}
+        <div class="row">
+          <div class="col-sm-8">
+            <a href="/{{d.dresstype}}/{{d.pk}}">
+              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+            <br>
+            <p>
+              <span class="rdressname">{{d.name}}</span>
+              <span class="rdressprice">({{currency}}{{d.price}})</span>
+            </p>
+          </div>
+            {% if request.user.is_staff %}
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+              <input type="hidden" name="todo" value="deleteitem"/>
+              <button type="submit">Delete</button>
+            </form>
+            {% endif %}
+          </div>
+          {% empty %}
+            <p>No sarees available</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
 <!-- <div class="container">
   <form method="post">
     {% csrf_token %}
@@ -33,98 +160,7 @@ SuShee Fashionista
 </div> -->
 
 
-<div class="container flexdisplay dressitems" id="dkurta">
-  {%for d in kurtarate %}
-    <div>
-      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
-      <br>
-      <p>
-        <span class="rdressname">{{d.name}}</span>
-        <span class="rdressprice">({{currency}}{{d.price}})</span>
-      </p>
-      {% if request.user.is_staff %}
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-        <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-        <input type="hidden" name="todo" value="deleteitem"/>
-        <button type="submit">Delete</button>
-      </form>
-      {% endif %}
-    </div>
-    {% empty %}
-      <p>No kurtas available</p>
-  {% endfor %}
-</div>
-<div class="container flexdisplay dressitems" id="dtop">
-  {%for d in toprate %}
-    <div>
-      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
-      <br>
-      <p>
-        <span class="rdressname">{{d.name}}</span>
-        <span class="rdressprice">({{currency}}{{d.price}})</span>
-      </p>
-      {% if request.user.is_staff %}
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-        <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-        <input type="hidden" name="todo" value="deleteitem"/>
-        <button type="submit">Delete</button>
-      </form>
-      {% endif %}
-    </div>
-    {% empty %}
-      <p>No tops available</p>
-  {% endfor %}
-</div>
-<div class="container flexdisplay dressitems" id="dtrouser">
-  {%for d in trouserrate %}
-    <div>
-      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
-      <br>
-      <p>
-        <span class="rdressname">{{d.name}}</span>
-        <span class="rdressprice">({{currency}}{{d.price}})</span>
-      </p>
-      {% if request.user.is_staff %}
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-        <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-        <input type="hidden" name="todo" value="deleteitem"/>
-        <button type="submit">Delete</button>
-      </form>
-      {% endif %}
-    </div>
-    {% empty %}
-      <p>No trousers available</p>
-  {% endfor %}
-</div>
-<div class="container flexdisplay dressitems" id="dsaree">
-  {%for d in sareerate %}
-    <div>
-      <a href="/{{d.dresstype}}/{{d.pk}}"><img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
-      <br>
-      <p>
-        <span class="rdressname">{{d.name}}</span>
-        <span class="rdressprice">({{currency}}{{d.price}})</span>
-      </p>
-      {% if request.user.is_staff %}
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-        <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-        <input type="hidden" name="todo" value="deleteitem"/>
-        <button type="submit">Delete</button>
-      </form>
-      {% endif %}
-    </div>
-    {% empty %}
-      <p>No sarees available</p>
-  {% endfor %}
-</div>
+
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {

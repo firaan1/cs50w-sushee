@@ -42,10 +42,11 @@ SuShee Fashionista
 
 <!-- handlebars -->
 {% verbatim %}
+<div class="row">
 <script id="select_template" type="text/x-handlebars-template">
-  <div id="d{{vartype}}" class="form-group div_order" data-dresstype="{{dresstype}}">
+  <div id="d{{vartype}}" class="form-group div_order " data-dresstype="{{dresstype}}">
     <label for="s{{vartype}}">{{vartype}}</label>
-    <select id="s{{vartype}}" class="form-control select_order" name="{{vartype}}" data-dresstype="{{dresstype}}">
+    <select id="s{{vartype}}" class="form-control select_order col-sm-6" name="{{vartype}}" data-dresstype="{{dresstype}}">
       <option value="" selected disabled>Select {{vartype}}</option>
       {{#each varlist}}
         {{#strincludes ../vartype 'color'}}
@@ -61,22 +62,22 @@ SuShee Fashionista
   <span id="span_{{vartype}}" name="span_{{vartype}}" class="cspan" value=""></span>
 </script> -->
 <script id="input_template" type="text/x-handlebars-template">
-  <div class="form-group">
+  <div class="form-group col-sm-6">
     <input type="number" id="p_{{dresstype}}" name="p_{{dresstype}}" class="price" min="0" max="9999" value="0" step=".01"/>
     <input type="hidden" id="dresstype" name="dresstype" value="{{dresstype}}"/>
   </div>
 </script>
 <script id="input_text_template" type="text/x-handlebars-template">
-  <div class="form-group">
+  <div class="form-group col-sm-6">
     <label for="t_{{vartype}}">{{vartype}}</label>
     <input type="text" id="t_{{vartype}}" name="t_{{vartype}}" class="t{{dresstype}}"/>
   </div>
 </script>
 <script id="input_image_template" type="text/x-handlebars-template">
-  <div class="form-group">
+  <div class="form-group col-sm-6">
     <label for="i_{{vartype}}">{{vartype}}</label>
     <input name="i_{{vartype}}" id="i_{{vartype}}" name="i_{{vartype}}"  class="i{{dresstype}}" type="file" size="50" accept="image/*" multiple />
-    <button type="button" class="btn btn-default btn_clear">clear</button>
+    <button type="button" class="btn btn-dark btn_clear">clear</button>
   </div>
 </script>
 <script id="addbtn_template" type="text/x-handlebars-template">
@@ -106,7 +107,7 @@ SuShee Fashionista
     </div>
   </div>
 </script>
-
+</div>
 {% endverbatim %}
 <!--  -->
 <script>
@@ -248,7 +249,7 @@ SuShee Fashionista
     dresssize.multiple = true;
     if(dresssize.dataset.dresstype === "saree"){
       dresssize.multiple = false;
-      dresssize.selectedIndex = 1;
+      // dresssize.selectedIndex = 1;
     }
     dresssizeinput.parentElement.style.display = "none";
     [dressname, dressmodel, dresssize, dresscolor, dressimage, dressprice].forEach(event => {

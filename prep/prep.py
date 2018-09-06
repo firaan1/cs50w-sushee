@@ -36,3 +36,8 @@ for size, tofitwaist, tofithip in reader:
     c = TrouserSize(size = size, tofitwaist = tofitwaist, tofithip = tofithip)
     c.save()
     del(c)
+
+# for sarees
+s = SareeSize()
+s.save()
+del(s)
