@@ -5,13 +5,57 @@ SuShee Fashionista
 {% endblock %}
 
 {% block body %}
-<hr>
-<h1>SuShee Fashionista</h1>
-<ul>
-  <li>Buy kurtas, tops, trousers and sarees online</li>
-</ul>
+{% load static %}
+<div class="container">
+  <div class="text-center" style="margin-top:10px">
+    <h2><a class="indexinit" id="kurta" href="{% url 'collections' %}">Kurtas</a> | <a class="indexinit" id="top" href="{% url 'collections' %}">Tops</a> | <a class="indexinit" id="trouser" href="{% url 'collections' %}">Trousers</a> | <a class="indexinit" id="saree" href="{% url 'collections' %}">Sarees</a></h2>
+  </div>
+<div id="demo" class="carousel slide" data-ride="carousel"style="margin-top:20px;">
+
+  <!-- Indicators -->
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+    <li data-target="#demo" data-slide-to="2"></li>
+  </ul>
+
+  <!-- The slideshow -->
+  <div class="carousel-inner" role="listbox" style=" width:100%; height: 450px !important;">
+    <div class="carousel-item active">
+      <img src="{% static 'shopping/images/img1.jpg' %}" alt="Party Wear Collection" width="1100" height="500">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'shopping/images/img2.jpg' %}" alt="Suit Set Collection" width="1100" height="500">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'shopping/images/img3.jpg' %}" alt="Kurtis" width="1100" height="500">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'shopping/images/img4.jpg' %}" alt="Sarees" width="1100" height="500">
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'shopping/images/img.jpg' %}" alt="Others" width="1100" height="500">
+    </div>
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+</div>
+
+</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.indexinit').forEach(a => {
+      a.onclick = () => {
+        localStorage.setItem('tmpdressbtn', a.id);
+      }
+    });
   });
 </script>
 

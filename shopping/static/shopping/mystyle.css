@@ -2,3 +2,115 @@
   display: flex;
   flex-wrap: wrap;
 }
+.login  {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -150px 0 0 -150px;
+	width:300px;
+	height:300px;
+  color: white;
+}
+.carousel-inner img {
+    width: 100%;
+    height: 100%;
+}
+.historyimg img {
+  height:100px;
+  width: auto;
+}
+.dressitems a img {
+  height: 200px;
+  width: auto;
+}
+.dressitems p {
+  width: max-content;
+}
+.dressitems form button {
+}
+.image{
+  background-color: black;
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('img3.jpg');
+  background-size: 1500px;
+}
+h1 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-align:center; }
+
+.dressinputs input {
+	width: 100%;
+	margin-bottom: 10px;
+	background: rgba(0,0,0,0.1);
+	border: none;
+	outline: none;
+	padding: 10px;
+	font-size: 13px;
+	color: black;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.3);
+	border-radius: 4px;
+}
+.side-menu{
+  background-color: #343a40;
+  text-align: center;
+  height: 100vh;
+}
+.side-menu a {
+  color: cyan;
+  font-weight: bold;
+}
+.circle{
+  background-color: #FFFFFF;
+    border: 1px solid #282C3F;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    padding: 0;
+    min-width: 45px;
+    height: 45px;
+    text-align: center;
+    margin-top: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: #282C3F;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -moz-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    font-weight: 500;
+}
+.circlerate{
+  background-color: #FFFFFF;
+    border: 1px solid #282C3F;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    padding: 0;
+    min-width: 25px;
+    height: 25px;
+    width: auto;
+    text-align: center;
+    margin-right: 10px;
+    cursor: pointer;
+    color: #282C3F;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    -moz-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    font-weight: 500;
+}
+
+#incartitemslist {
+  -webkit-animation-name: example;
+    -webkit-animation-duration: 1s;
+    animation-name: example;
+    animation-duration: 1s;
+}
+@-webkit-keyframes example {
+  from {font-size:25px;color:orange;}
+  to {font-size:15px;color:white;}
+}
+@keyframes example {
+  from {font-size:25px;color:orange;}
+  to {font-size:15px;color:white;}
+}

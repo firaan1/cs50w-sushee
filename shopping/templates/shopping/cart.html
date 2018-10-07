@@ -5,37 +5,54 @@ SuShee Fashionista
 {% endblock %}
 
 {% block body %}
+
 <hr>
 <div class="container">
+  {% if userorder_list %}
+  <h4>Your Orders</h4>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <button type="submit" class="btn btn-danger">Clear All</button>
+      </div>
+      <input type="hidden" name="todo" value="clearall"/>
+    </form>
+  {% endif %}
+  <div class="row">
   {% for userorder, size, orderpk in userorder_list %}
-    <div class="cart_dress_image">
-      <a href="{% url 'dressitem' userorder.dresstype userorder.pk %}"><img src="{{userorder.image.first.document.url}}" alt="{{userorder.image.first}}"/></a>
+    <div class="cart_dress_image col-sm-3">
+      <a href="{% url 'dressitem' userorder.dresstype userorder.pk %}">
+        <img src="{{userorder.image.first.document.url}}" alt="{{userorder.image.first}}" width="40%" height="50%"/></a>
+      <div class="cart_dress_name">
+        {{userorder.name}}
+      </div>
+      <div class="cart_dress_size">
+        {{size}}
+      </div>
     </div>
-    <div class="cart_dress_name">
-      {{userorder.name}}
-    </div>
-    <div class="cart_dress_size">
-      {{size}}
-    </div>
-    <div class="cart_dress_price">
+
+    <div class="cart_dress_price col-sm-3">
       {{currency}}{{userorder.price}}
     </div>
-    <form method="post">
+    <form method="post" class="col-sm-4">
       {% csrf_token %}
       <input type="hidden" name="orderpk" value="{{orderpk}}"/>
       <input type="hidden" name="todo" value="delete"/>
-      <button type="submit">Delete</button>
+      <button type="submit" class="btn btn-danger">Delete</button>
     </form>
   {% empty %}
     <h4>No items in cart</h4>
   {% endfor %}
   {% if userorder_list %}
-  <div>
+  <div class="col-sm-3">
     <h4>Total: {{currency}}{{total_cost}}<h4>
   </div>
+  {% endif %}
 
-  <div>
-    <div class="form-group">
+</div>
+{% if userorder_list %}
+  <div class="row">
+    <div class="form-group col-sm-6">
       <label for="delivery_address">Deliver to:</label>
       <select class="form-control" id="delivery_address">
         {% for d in deliveryaddress %}
@@ -47,23 +64,25 @@ SuShee Fashionista
         {% endfor %}
       </select>
     </div>
-    <div class="form-group">
-      <button type="button" class="btn btn-default" id="add_new_address">+</button>
+    <div class="form-group col-sm-6" style="margin-top:30px;">
+      <button type="button" class="btn btn-dark" id="add_new_address">+</button>
     </div>
-    <form method="post" id="new_address_form">
-      {% csrf_token %}
-      <div class="form-group">
-        <textarea class="form-control" name="new_address" id="new_address" row="3" placeholder="Enter new address"></textarea>
-      </div>
-      <div class="form-group">
-        <input class="form-control" name="new_number" id="new_number" placeholder="+911234512345"/>
-      </div>
-      <div>
-        <span id="new_number_span"><span>
-      </div>
-      <input type="hidden" name="todo" value="address"/>
-      <button type="submit" id="submit_address">Add address</button>
-    </form>
+    <div class="col-sm-6">
+        <form method="post" id="new_address_form">
+          {% csrf_token %}
+          <div class="form-group">
+            <textarea class="form-control" name="new_address" id="new_address" row="3" placeholder="Enter new address"></textarea>
+          </div>
+          <div class="form-group">
+            <input class="form-control" name="new_number" id="new_number" placeholder="+911234512345"/>
+          </div>
+          <div>
+            <span id="new_number_span"><span>
+          </div>
+          <input type="hidden" name="todo" value="address"/>
+          <button type="submit" class="btn btn-dark" id="submit_address">Add address</button>
+        </form>
+    </div>
   </div>
 
   <div id="dmake_payment">

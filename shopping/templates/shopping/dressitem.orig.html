@@ -1,0 +1,182 @@
+{% extends "shopping/layout.html" %}
+
+{% block title %}
+SuShee Fashionista
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  <div class="row">
+  <!-- name -->
+  <div class="col-sm-6">
+    <div class="row">
+      <div class="col-sm-6">
+        <h3>Name (Model)</h3>{{dress.name}} ({{dress.model}})
+      </div>
+      {% if request.user.is_staff %}
+      <div class="col-sm-6" style="margin-top:30px;">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="todo" value="deleteitem"/>
+          <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+          <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+          <button type="submit" class="btn btn-dark">Delete</button>
+        </form>
+      </div>
+  </div>
+    {% endif %}
+    <!-- image -->
+    <div id="ind_images">
+      <h4>Images</h4>
+      {% for image in dress.image.all %}
+        <div>
+          <img src="{{image.document.url}}" alt="{{image}}"/>
+        </div>
+      {% endfor %}
+    </div>
+  <!-- color -->
+  <div>
+    <h4>Color</h4>
+    {% for dresscolor in dresscolor_obj %}
+      <div class="form-check form-check-inline">
+        {% if dress.image.first.color.code == dresscolor.image.first.color.code %}
+          <!-- <a href="/{{dresscolor.dresstype}}/{{dresscolor.pk}}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;border-style: solid;border-color:black;">&#9673;<a> -->
+          <a href="{% url 'dressitem' dresscolor.dresstype dresscolor.pk %}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;border-style: solid;border-color:black;position: relative; cursor: pointer;display: block;height: 100%;line-height: 16px;vertical-align: top;">&#9673;<a>
+        {% else %}
+          <a href="{% url 'dressitem' dresscolor.dresstype dresscolor.pk %}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;">&#9673;<a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+  <!-- size -->
+  <div class="col-sm-12">
+    <h4>Size</h4>
+    {%for size in dresssize %}
+      <div class="form-check form-check-inline">
+      {% if size in dress.size.all %}
+        {% if size == dress.size.all.0 %}
+          <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size.pk}}" checked>
+        {% else %}
+          <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size.pk}}">
+        {% endif %}
+        <button class="form-check-label circle" for="option{{size}}"><b>{{size}}</b></button>
+      {% else %}
+        <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size.pk}}" disabled>
+        <button class="form-check-label circle" for="option{{size}}">{{size}}</button>
+      {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <!-- price -->
+<div class="row" style="margin-top:20px;">
+  <div class="col-sm-6">
+    <h4>Price</h4>
+    <b>{{currency}}{{dress.price}}</b>
+  </div>
+  <!-- Add to cart -->
+  <div class="col-sm-3" style="margin-top:20px;">
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+      <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+      <input type="hidden" name="todo" value="add"/>
+      <input type="hidden" name="sizepk" id="dressize_input" value=""/>
+      <button type="submit" class="btn btn-dark add_to_cart" name="add_to_cart">Add to cart</button>
+    </form>
+  </div>
+</div>
+  <!-- rating -->
+  <div style="margin-top:20px;">
+    <h4>Rating</h4>
+    <form method="post">
+      {% csrf_token %}
+      {% for r in range %}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="ratinginput" id="rating{{r}}" value="{{r}}">
+          <label class="form-check-label circlerate" for="rating{{r}}">{{r}}</label>
+        </div>
+      {% endfor %}
+      <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+      <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+      <input type="hidden" name="todo" value="rate"/>
+      <input type="hidden" name="rating_input" id="rating_input" value=""/>
+      <button type="submit" class="btn btn-dark">Rate</button>
+    </form>
+
+    <p>Your rating: {{currentuserinput.rating}} / 5</p>
+    <p>Overall rating: {{overall_rating.rating__avg|default:"-"}} / 5.0 ({{overall_rating_count.rating__count}} users) </p>
+  </div>
+
+  <!-- review -->
+  <div class="">
+    <h4>Review</h4>
+    {% if currentuserinput.review %}
+      <p>{{currentuserinput.review}}</p>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+        <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+        <input type="hidden" name="todo" value="delete_review"/>
+        <button type="submit" class="btn btn-dark">Delete Review</button>
+      </form>
+    {% else %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-check">
+          <textarea class="form-control" name="reviewinput" id="reviewinput" row="5" value="" placeholder="Enter your review here"></textarea>
+          <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+          <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+          <input type="hidden" name="todo" value="review"/></br>
+          <button type="submit" class="btn btn-dark">Submit</button>
+        </div>
+      </form>
+    {% endif %}
+
+    <div>
+      {% for u in userinput %}
+       {% if u.review %}
+        <span><i class="fa fa-user" style="font-size:26px"></i>  {{u.user.username}}: {{u.review}}</span></br>
+       {% endif %}
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const dresssize_options = document.querySelectorAll('[name=sizeinput]');
+    const dresssize_input = document.querySelector('#dressize_input');
+
+    dresssize_options.forEach(item => {
+      // get size init
+      if (item.checked) {
+        dresssize_input.value = item.value;
+      }
+
+      // oninput
+      item.oninput = () => {
+        if (item.checked) {
+          dresssize_input.value = item.value;
+        }
+      }
+    });
+
+    const rating_options = document.querySelectorAll('[name=ratinginput]');
+    const rating_input = document.querySelector('#rating_input');
+
+    rating_options.forEach(item => {
+      item.oninput = () => {
+        if(item.checked){
+          rating_input.value = item.value;
+        }
+      }
+    });
+  });
+</script>
+
+{% endblock %}

@@ -5,48 +5,115 @@ SuShee Fashionista
 {% endblock %}
 
 {% block body %}
-<hr>
-
+{% load static %}
 <div class="container">
+  <div class="row">
   <!-- name -->
-  <div>
-    <h3>Name (Model)</h3>{{dress.name}} ({{dress.model}})
-  </div>
-  {% if request.user.is_staff %}
-  <form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="todo" value="deleteitem"/>
-    <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
-    <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
-    <button type="submit">Delete</button>
-  </form>
-  {% endif %}
-  <!-- image -->
-  <div id="ind_images">
-    <h3>Images</h3>
-    {% for image in dress.image.all %}
-      <div>
-        <img src="{{image.document.url}}" alt="{{image}}"/>
+  <!-- <div class="col-sm-6"> -->
+  <div class="col col-sm-6">
+    <div class="row">
+      <div class="col-sm-6">
+        <b>Name: {{dress.name}}<br>(Model: {{dress.model}})</b>
       </div>
-    {% endfor %}
+      {% if request.user.is_staff %}
+        <div class="col-sm-6" style="margin-top:30px;">
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="todo" value="deleteitem"/>
+            <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+            <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      {% endif %}
   </div>
+
+  <!-- image -->
+  <div class="row offset-lg-2 offset-md-2 offset-sm-2">
+      <!-- <h4>Images</h4> -->
+
+
+<!--  -->
+<div id="demo1" class="carousel slide" data-ride="carousel"style="margin-top:20px;">
+
+  <!-- The slideshow -->
+  <!-- <div class="carousel-inner" role="listbox" style=" width:100%; height: 450px !important;"> -->
+  <div class="carousel-inner" role="listbox">
+  {% for image in dress.image.all %}
+    {% if image == dress.image.all.0 %}
+      <div class="carousel-item active">
+        <img src="{{image.document.url}}" alt="{{image}}">
+      </div>
+    {% else %}
+      <div class="carousel-item">
+        <img src="{{image.document.url}}" alt="{{image}}">
+      </div>
+    {% endif %}
+  {% endfor %}
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="carousel-control-prev" href="#demo1" data-slide="prev" style="background-color:red; opacity:20%">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo1" data-slide="next" style="background-color:red; opacity:20%">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+</div>
+
+<!--  -->
+
+      <!-- <div id="demo1" class="carousel slide" data-ride="carousel" style="margin-top:20px;">
+          <ul class="carousel-indicators">
+            {% if image == dress.image.all.0 %}
+              <li data-target="#demo1" data-slide-to="{{forloop.counter0}}" class="active"></li>
+            {% else %}
+              <li data-target="#demo1" data-slide-to="{{forloop.counter0}}"></li>
+            {% endif %}
+          </ul>
+
+          <div class="carousel-inner" role="listbox" style="width:100%; height: 450px !important;">
+            {% if image == dress.image.all.0 %}
+              <div class="carousel-item active">
+                <img src="{{image.document.url}}" alt="{{image}}"/>
+              </div>
+            {% else %}
+              <div class="carousel-item">
+                <img src="{{image.document.url}}" alt="{{image}}"/>
+              </div>
+            {% endif %}
+          </div>
+
+          <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </a>
+          <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </a>
+        </div> -->
+        <!-- <div>
+          <img src="{{image.document.url}}" alt="{{image}}"/>
+        </div> -->
+    </div>
   <!-- color -->
   <div>
-    <h3>Color</h3>
+    <h4>Color</h4>
     {% for dresscolor in dresscolor_obj %}
       <div class="form-check form-check-inline">
         {% if dress.image.first.color.code == dresscolor.image.first.color.code %}
           <!-- <a href="/{{dresscolor.dresstype}}/{{dresscolor.pk}}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;border-style: solid;border-color:black;">&#9673;<a> -->
-          <a href="{% url 'dressitem' dresscolor.dresstype dresscolor.pk %}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;border-style: solid;border-color:black;">&#9673;<a>
+          <a href="{% url 'dressitem' dresscolor.dresstype dresscolor.pk %}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;border-style: solid;border-color:black;position: relative; cursor: pointer;display: block;height: 100%;line-height: 16px;vertical-align: top;">&#9673;<a>
         {% else %}
           <a href="{% url 'dressitem' dresscolor.dresstype dresscolor.pk %}" style="color:{{dresscolor.image.first.color.code}};text-decoration: none !important;">&#9673;<a>
         {% endif %}
       </div>
     {% endfor %}
   </div>
+  </div>
+<div class="col col-sm-6" style="height:100%;display:contents">
   <!-- size -->
-  <div>
-    <h3>Size</h3>
+  <div class="col-sm-12">
+    <h4>Size</h4>
     {%for size in dresssize %}
       <div class="form-check form-check-inline">
       {% if size in dress.size.all %}
@@ -55,91 +122,99 @@ SuShee Fashionista
         {% else %}
           <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size.pk}}">
         {% endif %}
-        <label class="form-check-label" for="option{{size}}"><b>{{size}}</b></label>
+        <!-- <button class="form-check-label circle" for="option{{size}}"><b>{{size}}</b></button> -->
+        <label class="form-check-label circlerate" for="option{{size}}"><b>{{size}}</b></label>
       {% else %}
         <input class="form-check-input" type="radio" name="sizeinput" id="option{{size}}" value="{{size.pk}}" disabled>
-        <label class="form-check-label" for="option{{size}}">{{size}}</label>
+        <!-- <button class="form-check-label circle" for="option{{size}}">{{size}}</button> -->
+        <label class="form-check-label circlerate" for="option{{size}}">{{size}}</label>
       {% endif %}
       </div>
     {% endfor %}
   </div>
   <!-- price -->
-  <div>
-    <h3>Price</h3>
-    {{currency}}{{dress.price}}
+<!-- price -->
+<div class="row" style="margin-top:20px;">
+  <div class="col-sm-6">
+    <h4>Price</h4>
+    <b>{{currency}}{{dress.price}}</b>
   </div>
   <!-- Add to cart -->
-  <div class="container">
+  <div class="col-sm-3" style="margin-top:20px;">
     <form method="post">
       {% csrf_token %}
       <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
       <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
       <input type="hidden" name="todo" value="add"/>
       <input type="hidden" name="sizepk" id="dressize_input" value=""/>
-      <button type="submit" class="btn btn-primary add_to_cart" name="add_to_cart">Add to cart</button>
+      <button type="submit" class="btn btn-dark add_to_cart" name="add_to_cart">Add to cart</button>
     </form>
   </div>
-  <!-- rating -->
-  <div class="container">
-    <h3>Rating</h3>
-    <form method="post">
-      {% csrf_token %}
-      {% for r in range %}
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="ratinginput" id="rating{{r}}" value="{{r}}">
-          <label class="form-check-label" for="rating{{r}}">{{r}}</label>
-        </div>
-      {% endfor %}
-      <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
-      <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
-      <input type="hidden" name="todo" value="rate"/>
-      <input type="hidden" name="rating_input" id="rating_input" value=""/>
-      <button type="submit" class="btn btn-default">Rate</button>
-    </form>
-
-    <p>Your rating: {{currentuserinput.rating}} / 5</p>
-    <p>Overall rating: {{overall_rating.rating__avg|default:"-"}} / 5.0 ({{overall_rating_count.rating__count}} users) </p>
-  </div>
-
-  <!-- review -->
-  <div class="container">
-    <h3>Review</h3>
-    {% if currentuserinput.review %}
-      <p>{{currentuserinput.review}}</p>
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
-        <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
-        <input type="hidden" name="todo" value="delete_review"/>
-        <button type="submit" class="btn btn-default">Delete Review</button>
-      </form>
-    {% else %}
-      <form method="post">
-        {% csrf_token %}
-        <div class="form-check">
-          <textarea name="reviewinput" id="reviewinput" row="5" value="" placeholder="Enter your review here"></textarea>
-          <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
-          <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
-          <input type="hidden" name="todo" value="review"/>
-        </div>
-        <div>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </div>
-      </form>
-    {% endif %}
-
-    <div>
-      <ul>
-      {% for u in userinput %}
-       {% if u.review %}
-        <li>{{u.user.username}}: {{u.review}}</li>
-       {% endif %}
-      {% endfor %}
-      </ul>
+</div>
+</div>
+</div>
+<!-- rating -->
+<hr>
+<div style="margin-top:20px;">
+  <h4>Rating</h4>
+  <form method="post">
+    {% csrf_token %}
+    {% for r in range %}
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="ratinginput" id="rating{{r}}" value="{{r}}">
+      <label class="form-check-label circlerate" for="rating{{r}}">{{r}}</label>
     </div>
+    {% endfor %}
+    <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+    <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+    <input type="hidden" name="todo" value="rate"/>
+    <input type="hidden" name="rating_input" id="rating_input" value=""/>
+    <button type="submit" class="btn btn-dark">Rate</button>
+  </form>
 
+  <p>Your rating: {{currentuserinput.rating|default:"-"}} / 5</p>
+  <p>Overall rating: {{overall_rating.rating__avg|default:"-"}} / 5.0 ({{overall_rating_count.rating__count}} users) </p>
+</div>
+
+<!-- review -->
+<div class="">
+  <h4>Review</h4>
+  {% if currentuserinput.review %}
+  <p>Your review: {{currentuserinput.review}}</p>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+    <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+    <input type="hidden" name="todo" value="delete_review"/>
+    <button type="submit" class="btn btn-danger">Delete Review</button>
+  </form>
+  {% else %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-check">
+      <textarea class="form-control" name="reviewinput" id="reviewinput" row="5" value="" placeholder="Enter your review here"></textarea>
+      <input type="hidden" name="dresstype" value="{{dress.dresstype}}"/>
+      <input type="hidden" name="dresspk" value="{{dress.pk}}"/>
+      <input type="hidden" name="todo" value="review"/></br>
+      <button type="submit" class="btn btn-dark">Submit</button>
+    </div>
+  </form>
+  {% endif %}
+
+  <div class="container">
+    <ul>
+    {% for u in userinput %}
+    {% if u.review %}
+    <hr>
+    <li>
+      <span><i class="fa fa-user" style="font-size:26px"></i>  {{u.user.username}}: {{u.review}}</span></br>
+    </li>
+    {% endif %}
+    {% endfor %}
+    </ul>
   </div>
 
+</div>
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -150,12 +225,20 @@ SuShee Fashionista
     dresssize_options.forEach(item => {
       // get size init
       if (item.checked) {
+        dresssize_options.forEach(item2 => {
+          item2.labels[0].style.border = "1px solid";
+        });
+        item.labels[0].style.border = "solid";
         dresssize_input.value = item.value;
       }
 
       // oninput
       item.oninput = () => {
         if (item.checked) {
+          dresssize_options.forEach(item2 => {
+            item2.labels[0].style.border = "1px solid";
+          });
+          item.labels[0].style.border = "solid";
           dresssize_input.value = item.value;
         }
       }
@@ -167,6 +250,10 @@ SuShee Fashionista
     rating_options.forEach(item => {
       item.oninput = () => {
         if(item.checked){
+          rating_options.forEach(item2 => {
+            item2.labels[0].style.border = "1px solid";
+          });
+          item.labels[0].style.border = "solid";
           rating_input.value = item.value;
         }
       }

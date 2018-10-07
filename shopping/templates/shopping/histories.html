@@ -9,9 +9,9 @@ SuShee Fashionista
 
 {% if status %}
   {% if status == "success" %}
-    <h1>Payment Sucessful</h1>
+    <h1 style="color:black">Payment Sucessful</h1>
   {% else %}
-    <h1>Payment Failed</h1>
+    <h1 style="color:black">Payment Failed</h1>
     <p>{{status}}</p>
   {% endif %}
 {% endif %}
@@ -25,7 +25,7 @@ SuShee Fashionista
         {% if order.dresstype == "kurta" %}
           {% for kurta in kurtarate %}
             {% if kurta.pk == order.dresspk %}
-              <a href="{% url 'dressitem' kurta.dresstype kurta.pk %}"><img src="{{kurta.image.first.document.url}}" /></a>
+              <a class="historyimg" href="{% url 'dressitem' kurta.dresstype kurta.pk %}"><img src="{{kurta.image.first.document.url}}" /></a>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -33,7 +33,7 @@ SuShee Fashionista
         {% if order.dresstype == "top" %}
           {% for top in toprate %}
             {% if top.pk == order.dresspk %}
-              <a href="{% url 'dressitem' top.dresstype top.pk %}"><img src="{{top.image.first.document.url}}" /></a>
+              <a class="historyimg" href="{% url 'dressitem' top.dresstype top.pk %}"><img src="{{top.image.first.document.url}}" /></a>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -41,7 +41,7 @@ SuShee Fashionista
         {% if order.dresstype == "trouser" %}
           {% for trouser in trouserrate %}
             {% if trouser.pk == order.dresspk %}
-              <a href="{% url 'dressitem' trouser.dresstype trouser.pk %}"><img src="{{trouser.image.first.document.url}}" /></a>
+              <a class="historyimg" href="{% url 'dressitem' trouser.dresstype trouser.pk %}"><img src="{{trouser.image.first.document.url}}" /></a>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -49,7 +49,7 @@ SuShee Fashionista
         {% if order.dresstype == "saree" %}
           {% for saree in sareerate %}
             {% if saree.pk == order.dresspk %}
-              <a href="{% url 'dressitem' saree.dresstype saree.pk %}"><img src="{{saree.image.first.document.url}}" /></a>
+              <a class="historyimg" href="{% url 'dressitem' saree.dresstype saree.pk %}"><img src="{{saree.image.first.document.url}}" /></a>
             {% endif %}
           {% endfor %}
         {% endif %}
