@@ -8,7 +8,16 @@ SuShee Fashionista
 
 <hr>
 <div class="container">
+  {% if userorder_list %}
   <h4>Your Orders</h4>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <button type="submit" class="btn btn-danger">Clear All</button>
+      </div>
+      <input type="hidden" name="todo" value="clearall"/>
+    </form>
+  {% endif %}
   <div class="row">
   {% for userorder, size, orderpk in userorder_list %}
     <div class="cart_dress_image col-sm-3">
@@ -29,7 +38,7 @@ SuShee Fashionista
       {% csrf_token %}
       <input type="hidden" name="orderpk" value="{{orderpk}}"/>
       <input type="hidden" name="todo" value="delete"/>
-      <button type="submit" class="btn btn-dark">Delete</button>
+      <button type="submit" class="btn btn-danger">Delete</button>
     </form>
   {% empty %}
     <h4>No items in cart</h4>
@@ -38,8 +47,10 @@ SuShee Fashionista
   <div class="col-sm-3">
     <h4>Total: {{currency}}{{total_cost}}<h4>
   </div>
+  {% endif %}
 
 </div>
+{% if userorder_list %}
   <div class="row">
     <div class="form-group col-sm-6">
       <label for="delivery_address">Deliver to:</label>

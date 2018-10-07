@@ -8,7 +8,7 @@ SuShee Fashionista
 {% load static %}
 <div class="container">
   <div class="text-center" style="margin-top:10px">
-    <h2>Kurtas | Tops | Trousers | Sarees</h2>
+    <h2><a class="indexinit" id="kurta" href="{% url 'collections' %}">Kurtas</a> | <a class="indexinit" id="top" href="{% url 'collections' %}">Tops</a> | <a class="indexinit" id="trouser" href="{% url 'collections' %}">Trousers</a> | <a class="indexinit" id="saree" href="{% url 'collections' %}">Sarees</a></h2>
   </div>
 <div id="demo" class="carousel slide" data-ride="carousel"style="margin-top:20px;">
 
@@ -51,6 +51,11 @@ SuShee Fashionista
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.indexinit').forEach(a => {
+      a.onclick = () => {
+        localStorage.setItem('tmpdressbtn', a.id);
+      }
+    });
   });
 </script>
 

@@ -225,12 +225,20 @@ SuShee Fashionista
     dresssize_options.forEach(item => {
       // get size init
       if (item.checked) {
+        dresssize_options.forEach(item2 => {
+          item2.labels[0].style.border = "1px solid";
+        });
+        item.labels[0].style.border = "solid";
         dresssize_input.value = item.value;
       }
 
       // oninput
       item.oninput = () => {
         if (item.checked) {
+          dresssize_options.forEach(item2 => {
+            item2.labels[0].style.border = "1px solid";
+          });
+          item.labels[0].style.border = "solid";
           dresssize_input.value = item.value;
         }
       }
@@ -242,6 +250,10 @@ SuShee Fashionista
     rating_options.forEach(item => {
       item.oninput = () => {
         if(item.checked){
+          rating_options.forEach(item2 => {
+            item2.labels[0].style.border = "1px solid";
+          });
+          item.labels[0].style.border = "solid";
           rating_input.value = item.value;
         }
       }

@@ -171,10 +171,17 @@ SuShee Fashionista
 
     document.querySelectorAll('.dressbtn').forEach(button => {
       button.onclick = () => {
+        localStorage.setItem('tmpdressbtn', button.id);
         dressitems.forEach(item => {item.style.display = "none";});
         document.querySelector('#d' + button.id).style.display = "flex";
       }
     });
+
+    if(localStorage.tmpdressbtn){
+      const tmpredirect = localStorage.tmpdressbtn;
+      localStorage.removeItem('tmpdressbtn');
+      document.querySelector('#' + tmpredirect).click();
+    }
 
   });
 </script>

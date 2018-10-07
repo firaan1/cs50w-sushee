@@ -10,24 +10,24 @@ SuShee Fashionista
 
 <div class="container">
   <div>
-    <a class="dressbtn" id="kurta" href="#">Kurtas</a>
-    <a class="dressbtn" id="top" href="#">Tops</a>
-    <a class="dressbtn" id="trouser" href="#">Trousers</a>
-    <a class="dressbtn" id="saree" href="#">Sarees</a>
+    <a class="dressbtn btn btn-info" id="kurta" href="#">Add Kurtas</a>
+    <a class="dressbtn btn btn-info" id="top" href="#">Add Tops</a>
+    <a class="dressbtn btn btn-info" id="trouser" href="#">Add Trousers</a>
+    <a class="dressbtn btn btn-info" id="saree" href="#">Add Sarees</a>
   </div>
 </div>
-
+<hr>
 <div class="container">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="todo" value="additem"/>
-    <div class="container" id="dkurta">
+    <div class="container dressinputs" id="dkurta">
     </div>
-    <div class="container" id="dtop">
+    <div class="container dressinputs" id="dtop">
     </div>
-    <div class="container" id="dtrouser">
+    <div class="container dressinputs" id="dtrouser">
     </div>
-    <div class="container" id="dsaree">
+    <div class="container dressinputs" id="dsaree">
     </div>
   </form>
 </div>
@@ -94,7 +94,7 @@ SuShee Fashionista
         <div>
            {{#each ../image}}
             {{#strequals this.pk ../this.fields.image.[0]}}
-              <a href="{{../../dresstype}}/{{../this.pk}}"><img src="/media/{{this.fields.document}}" alt="{{this.fields.document}}"/></a>
+              <a href="{{../../dresstype}}/{{../this.pk}}"><img src="/media/{{this.fields.document}}" alt="{{this.fields.document}}" style="height:160px; width:auto;padding-left:10px"/></a>
             {{/strequals}}
            {{/each}}
           <br>
