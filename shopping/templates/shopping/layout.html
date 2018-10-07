@@ -18,8 +18,8 @@
     <link rel="stylesheet" href="{% static 'shopping/mystyle.css' %}">
   </head>
   <body id="dbody">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <a class="navbar-brand" href="#"><b>SuShee Fashionista</b></a>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="margin-bottom:15px;">
+  <a class="navbar-brand" href="#" style="color:cyan"><b>SuShee Fashionista</b></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -51,7 +51,7 @@
       </li>
       {% if incart_items > 0 %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'cart' %}"><b style="color:white"><span id="itemsincart">{{incart_items}} item(s) in cart</span></b></a>
+        <a class="nav-link" href="{% url 'cart' %}"><b id="incartitemslist" style="color:white"><span id="itemsincart">{{incart_items}} item(s) in cart</span></b></a>
       </li>
       {% endif %}
       {% else %}
@@ -66,51 +66,12 @@
   </ul>
   </div>
 </nav>
-    <!-- <div class="container">
-      <form>
-        <div class="form-group">
-          <button type="button" class="btn btn-primary btnloc" id="btn_home" data-urlfor="{% url 'index' %}">Home</button>
-          <button type="button" class="btn btn-primary btnloc" id="btn_order" data-urlfor="{% url 'collections' %}">Collections</button>
-          {% if request.user.id %}
-            <button type="button" class="btn btn-primary btnloc" id="btn_cart" data-urlfor="{% url 'cart' %}">Cart</button>
-            <button type="button" class="btn btn-primary btnloc" id="btn_histories" data-urlfor="{% url 'histories' %}">Order Histories</button>
-            {% if request.user.is_staff %}
-              <button type="button" class="btn btn-primary btnloc" id="btn_additems" data-urlfor="{% url 'additems' %}">Add items</button>
-            {% endif %}
-            <button type="button" class="btn btn-primary loggedin btnloc" id="btn_logout" data-urlfor="{% url 'logout' %}">Logout</button>
-          {% else %}
-            <button type="button" class="btn btn-primary loggedout btnloc" id="btn_login" data-urlfor="{% url 'login' %}">Login</button>
-            <button type="button" class="btn btn-default loggedout btnloc" id="btn_register" data-urlfor="{% url 'register' %}">Register</button>
-          {% endif %}
-
-          {% if request.user.id %}
-            <div>{{request.user.username}}</div>
-            {% if incart_items > 0 %}
-              <div>
-                <a href="{% url 'cart' %}"><span id="itemsincart">{{incart_items}} item(s) in cart</span></a>
-              </div>
-            {% endif %}
-          {% endif %}
-        </div>
-    </form>
-    </div> -->
 
     {% block body %}
     {% endblock %}
 
     <script type="text/javascript">
 
-    // if("{{request.user.id}}" != "None") {
-    //   const loggedout = document.querySelectorAll('.loggedout');
-    //   loggedout[0].style.display = "none";
-    //   loggedout[1].style.display = "none";
-    //   document.querySelector('.loggedin').style.display = "inline";
-    // } else {
-    //   document.querySelector('.loggedin').style.display = "none";
-    //   const loggedout = document.querySelectorAll('.loggedout');
-    //   loggedout[0].style.display = "inline";
-    //   loggedout[1].style.display = "inline";
-    // }
 
     // button functions
     document.querySelectorAll('.btnloc').forEach(

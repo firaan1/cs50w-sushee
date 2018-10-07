@@ -5,7 +5,6 @@ SuShee Fashionista
 {% endblock %}
 
 {% block body %}
-<hr>
 <!-- <div class="container">
   <div>
     <a class="dressbtn" id="kurta" href="#">Kurtas</a>
@@ -14,7 +13,7 @@ SuShee Fashionista
     <a class="dressbtn" id="saree" href="#">Sarees</a>
   </div>
 </div> -->
-<div class="container" style="margin-top:30px">
+<div class="container">
   <div class="row">
     <div class="col-sm-3 side-menu">
       <ul class="nav nav-pills flex-column">
@@ -39,22 +38,22 @@ SuShee Fashionista
           <div class="row">
             <div class="col-sm-8">
               <a href="/{{d.dresstype}}/{{d.pk}}">
-                <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+                <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
               <br>
               <p>
                 <span class="rdressname">{{d.name}}</span>
                 <span class="rdressprice">({{currency}}{{d.price}})</span>
+                {% if request.user.is_staff %}
+                <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+                  <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+                  <input type="hidden" name="todo" value="deleteitem"/>
+                  <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                {% endif %}
               </p>
            </div>
-            {% if request.user.is_staff %}
-            <form method="post">
-              {% csrf_token %}
-              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-              <input type="hidden" name="todo" value="deleteitem"/>
-              <button type="submit">Delete</button>
-            </form>
-            {% endif %}
           </div>
           {% empty %}
             <p>No kurtas available</p>
@@ -65,22 +64,22 @@ SuShee Fashionista
         <div class="row">
           <div class="col-sm-8">
             <a href="/{{d.dresstype}}/{{d.pk}}">
-              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
             <br>
             <p>
               <span class="rdressname">{{d.name}}</span>
               <span class="rdressprice">({{currency}}{{d.price}})</span>
+              {% if request.user.is_staff %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+                <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+                <input type="hidden" name="todo" value="deleteitem"/>
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+              {% endif %}
             </p>
           </div>
-            {% if request.user.is_staff %}
-            <form method="post">
-              {% csrf_token %}
-              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-              <input type="hidden" name="todo" value="deleteitem"/>
-              <button type="submit">Delete</button>
-            </form>
-            {% endif %}
           </div>
           {% empty %}
             <p>No tops available</p>
@@ -91,22 +90,22 @@ SuShee Fashionista
         <div class="row">
           <div class="col-sm-8">
             <a href="/{{d.dresstype}}/{{d.pk}}">
-              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
             <br>
             <p>
               <span class="rdressname">{{d.name}}</span>
               <span class="rdressprice">({{currency}}{{d.price}})</span>
+              {% if request.user.is_staff %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+                <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+                <input type="hidden" name="todo" value="deleteitem"/>
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+              {% endif %}
             </p>
           </div>
-            {% if request.user.is_staff %}
-            <form method="post">
-              {% csrf_token %}
-              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-              <input type="hidden" name="todo" value="deleteitem"/>
-              <button type="submit">Delete</button>
-            </form>
-            {% endif %}
           </div>
           {% empty %}
             <p>No trousers available</p>
@@ -117,22 +116,22 @@ SuShee Fashionista
         <div class="row">
           <div class="col-sm-8">
             <a href="/{{d.dresstype}}/{{d.pk}}">
-              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}" width="150%" height="90%"/></a>
+              <img src="{{d.image.first.document.url}}" alt="{{d.image.first.document}}"/></a>
             <br>
             <p>
               <span class="rdressname">{{d.name}}</span>
               <span class="rdressprice">({{currency}}{{d.price}})</span>
+              {% if request.user.is_staff %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
+                <input type="hidden" name="dresspk" value="{{d.pk}}"/>
+                <input type="hidden" name="todo" value="deleteitem"/>
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+              {% endif %}
             </p>
           </div>
-            {% if request.user.is_staff %}
-            <form method="post">
-              {% csrf_token %}
-              <input type="hidden" name="dresstype" value="{{d.dresstype}}"/>
-              <input type="hidden" name="dresspk" value="{{d.pk}}"/>
-              <input type="hidden" name="todo" value="deleteitem"/>
-              <button type="submit">Delete</button>
-            </form>
-            {% endif %}
           </div>
           {% empty %}
             <p>No sarees available</p>
