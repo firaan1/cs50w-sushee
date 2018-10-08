@@ -254,6 +254,7 @@ def additems(request):
             dresscolor = request.POST[f"{dresstype}color"]
             dressprice = request.POST[f"p_{dresstype}"]
             images = request.FILES.getlist(f"i_{dresstype}image")
+            # return HttpResponse(str(images[0]))
             uploaded_images = []
             for i in images:
                 upload = Document(document = i, color = Color.objects.get(code = dresscolor))

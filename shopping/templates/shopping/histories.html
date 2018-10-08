@@ -5,7 +5,6 @@ SuShee Fashionista
 {% endblock %}
 
 {% block body %}
-<hr>
 
 {% if status %}
   {% if status == "success" %}
@@ -57,7 +56,7 @@ SuShee Fashionista
     <p>Status: {{placed_order.status}}</p>
     <p>Total: {{placed_order.total}}</p>
 {% empty %}
-    <li>No previous orders</li>
+    <h4>No previous orders</h4>
 {% endfor %}
 </div>
 

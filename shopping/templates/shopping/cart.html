@@ -6,61 +6,60 @@ SuShee Fashionista
 
 {% block body %}
 
-<hr>
 <div class="container">
   {% if userorder_list %}
   <h4>Your Orders</h4>
-    <form method="post">
-      {% csrf_token %}
-      <div class="form-group">
-        <button type="submit" class="btn btn-danger">Clear All</button>
-      </div>
-      <input type="hidden" name="todo" value="clearall"/>
-    </form>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <button type="submit" class="btn btn-danger">Clear All</button>
+    </div>
+    <input type="hidden" name="todo" value="clearall" />
+  </form>
   {% endif %}
   <div class="row">
-  {% for userorder, size, orderpk in userorder_list %}
+    {% for userorder, size, orderpk in userorder_list %}
     <div class="cart_dress_image col-sm-3">
       <a href="{% url 'dressitem' userorder.dresstype userorder.pk %}">
-        <img src="{{userorder.image.first.document.url}}" alt="{{userorder.image.first}}" width="40%" height="50%"/></a>
-      <div class="cart_dress_name">
-        {{userorder.name}}
-      </div>
-      <div class="cart_dress_size">
-        {{size}}
-      </div>
+        <img src="{{userorder.image.first.document.url}}" alt="{{userorder.image.first}}" height="200px" />
+      </a>
     </div>
 
-    <div class="cart_dress_price col-sm-3">
-      {{currency}}{{userorder.price}}
+    <div class="col-sm-3 text-right">
+      {{userorder.name}} ({{size}})
     </div>
-    <form method="post" class="col-sm-4">
+
+    <div class="cart_dress_price col-sm-3 text-right">
+        {{currency}}{{userorder.price}}
+    </div>
+    <form method="post" class="col-sm-3 text-right">
       {% csrf_token %}
-      <input type="hidden" name="orderpk" value="{{orderpk}}"/>
-      <input type="hidden" name="todo" value="delete"/>
+      <input type="hidden" name="orderpk" value="{{orderpk}}" />
+      <input type="hidden" name="todo" value="delete" />
       <button type="submit" class="btn btn-danger">Delete</button>
     </form>
-  {% empty %}
+    {% empty %}
     <h4>No items in cart</h4>
-  {% endfor %}
-  {% if userorder_list %}
-  <div class="col-sm-3">
-    <h4>Total: {{currency}}{{total_cost}}<h4>
-  </div>
-  {% endif %}
+    {% endfor %}
+    {% if userorder_list %}
+    <div class="col-sm-3">
+      <h4>Total: {{currency}}{{total_cost}}
+        <h4>
+    </div>
+    {% endif %}
 
-</div>
-{% if userorder_list %}
+  </div>
+  {% if userorder_list %}
   <div class="row">
     <div class="form-group col-sm-6">
       <label for="delivery_address">Deliver to:</label>
       <select class="form-control" id="delivery_address">
         {% for d in deliveryaddress %}
-          {% if d == deliveryaddress.0 %}
-            <option value="{{d.pk}}" selected>{{d}}</option>
-          {% else %}
-            <option value="{{d.pk}}">{{d}}</option>
-          {% endif %}
+        {% if d == deliveryaddress.0 %}
+        <option value="{{d.pk}}" selected>{{d}}</option>
+        {% else %}
+        <option value="{{d.pk}}">{{d}}</option>
+        {% endif %}
         {% endfor %}
       </select>
     </div>
@@ -68,40 +67,30 @@ SuShee Fashionista
       <button type="button" class="btn btn-dark" id="add_new_address">+</button>
     </div>
     <div class="col-sm-6">
-        <form method="post" id="new_address_form">
-          {% csrf_token %}
-          <div class="form-group">
-            <textarea class="form-control" name="new_address" id="new_address" row="3" placeholder="Enter new address"></textarea>
-          </div>
-          <div class="form-group">
-            <input class="form-control" name="new_number" id="new_number" placeholder="+911234512345"/>
-          </div>
-          <div>
-            <span id="new_number_span"><span>
-          </div>
-          <input type="hidden" name="todo" value="address"/>
-          <button type="submit" class="btn btn-dark" id="submit_address">Add address</button>
-        </form>
+      <form method="post" id="new_address_form">
+        {% csrf_token %}
+        <div class="form-group">
+          <textarea class="form-control" name="new_address" id="new_address" row="3" placeholder="Enter new address"></textarea>
+        </div>
+        <div class="form-group">
+          <input class="form-control" name="new_number" id="new_number" placeholder="+911234512345" />
+        </div>
+        <div>
+          <span id="new_number_span"><span>
+        </div>
+        <input type="hidden" name="todo" value="address" />
+        <button type="submit" class="btn btn-dark" id="submit_address">Add address</button>
+      </form>
     </div>
   </div>
 
   <div id="dmake_payment">
     <form action="{% url 'histories' %}" method="POST" class="makepayment">
       {% csrf_token %}
-      <input name="amount" value="{% widthratio total_cost 1 100 %}" type="hidden"/>
-      <input name="address_to_delivery" id="address_to_delivery" value="" type="hidden"/>
-      <script id="payment"
-        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="pk_test_vM1JtHcRqfBiUB04mbPkFcJe"
-        data-amount="{% widthratio total_cost 1 100 %}"
-        data-currency="inr"
-        data-name="Stripe.com"
-        data-email="{{request.user.email}}"
-        data-description="Example charge"
-        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-        data-locale="auto"
-        data-allow-remember-me="false"
-        data-zip-code="false">
+      <input name="amount" value="{% widthratio total_cost 1 100 %}" type="hidden" />
+      <input name="address_to_delivery" id="address_to_delivery" value="" type="hidden" />
+      <script id="payment" src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_vM1JtHcRqfBiUB04mbPkFcJe" data-amount="{% widthratio total_cost 1 100 %}" data-currency="inr" data-name="Stripe.com" data-email="{{request.user.email}}"
+        data-description="Example charge" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto" data-allow-remember-me="false" data-zip-code="false">
       </script>
     </form>
 
@@ -109,7 +98,7 @@ SuShee Fashionista
       <p>Please use one of the test <a href="https://stripe.com/docs/testing#cards">credit card numbers</a> in order to make payment.</p>
       supply any valid expiry date and a dummy >=3digit cvv number.
       <p>Dont use your credit card numbers. We will definitely steal from you.
-      *conditions apply</p>
+        *conditions apply</p>
     </div>
   </div>
   {% endif %}
@@ -120,70 +109,70 @@ SuShee Fashionista
 <script>
   document.addEventListener('DOMContentLoaded', () => {
 
-    if("{{ userorder_list }}" != "[]"){
+    if ("{{ userorder_list }}" != "[]") {
 
-    const new_address_form = document.querySelector('#new_address_form');
-    const dmake_payment = document.querySelector('#dmake_payment');
-    new_address_form.style.display = "none";
-    count = 0;
-    // address
-    document.querySelector('#add_new_address').onclick = () => {
-      if(count % 2 == 0){
-        document.querySelector('#add_new_address').innerHTML = "-";
-        new_address_form.style.display = "inline";
-      dmake_payment.style.display = "none";
-      } else {
-        document.querySelector('#add_new_address').innerHTML = "+";
-        new_address_form.style.display = "none";
-        dmake_payment.style.display = "block";
+      const new_address_form = document.querySelector('#new_address_form');
+      const dmake_payment = document.querySelector('#dmake_payment');
+      new_address_form.style.display = "none";
+      count = 0;
+      // address
+      document.querySelector('#add_new_address').onclick = () => {
+        if (count % 2 == 0) {
+          document.querySelector('#add_new_address').innerHTML = "-";
+          new_address_form.style.display = "inline";
+          dmake_payment.style.display = "none";
+        } else {
+          document.querySelector('#add_new_address').innerHTML = "+";
+          new_address_form.style.display = "none";
+          dmake_payment.style.display = "block";
+        }
+        count += 1;
+      };
+
+      // phone number
+      const new_number = document.querySelector('#new_number');
+      const new_number_span = document.querySelector('#new_number_span');
+      const submit_address = document.querySelector('#submit_address');
+      const new_address = document.querySelector('#new_address');
+
+
+      new_number_span.innerHTML = "Please enter a valid address and phone number";
+      submit_address.disabled = true;
+
+      new_address.oninput = () => {
+        if (new_address.value.length > 0 && check_number(new_number.value)) {
+          new_number_span.innerHTML = "";
+          submit_address.disabled = false;
+        } else {
+          new_number_span.innerHTML = "Please enter a valid address and phone number";
+          submit_address.disabled = true;
+        }
       }
-      count += 1;
-    };
 
-    // phone number
-    const new_number = document.querySelector('#new_number');
-    const new_number_span = document.querySelector('#new_number_span');
-    const submit_address = document.querySelector('#submit_address');
-    const new_address = document.querySelector('#new_address');
-
-
-    new_number_span.innerHTML = "Please enter a valid address and phone number";
-    submit_address.disabled = true;
-
-    new_address.oninput = () => {
-      if(new_address.value.length > 0 && check_number(new_number.value)){
-        new_number_span.innerHTML = "";
-        submit_address.disabled = false;
-      } else {
-        new_number_span.innerHTML = "Please enter a valid address and phone number";
-        submit_address.disabled = true;
+      new_number.oninput = () => {
+        if (new_address.value.length > 0 && check_number(new_number.value)) {
+          new_number_span.innerHTML = "";
+          submit_address.disabled = false;
+        } else {
+          new_number_span.innerHTML = "Please enter a valid address and phone number";
+          submit_address.disabled = true;
+        }
       }
-    }
 
-    new_number.oninput = () => {
-      if(new_address.value.length > 0 && check_number(new_number.value)){
-        new_number_span.innerHTML = "";
-        submit_address.disabled = false;
-      } else {
-        new_number_span.innerHTML = "Please enter a valid address and phone number";
-        submit_address.disabled = true;
-      }
-    }
-
-    // address update
-    const delivery_address = document.querySelector('#delivery_address');
-    const address_to_delivery = document.querySelector('#address_to_delivery');
-    address_to_delivery.value = delivery_address.value;
-    delivery_address.onchange = () => {
+      // address update
+      const delivery_address = document.querySelector('#delivery_address');
+      const address_to_delivery = document.querySelector('#address_to_delivery');
       address_to_delivery.value = delivery_address.value;
-    }
+      delivery_address.onchange = () => {
+        address_to_delivery.value = delivery_address.value;
+      }
 
-  }
+    }
   });
 
-  function check_number(number){
+  function check_number(number) {
     var regex = /^[0-9+]+$/;
-    if(number.match(regex)){
+    if (number.match(regex)) {
       return true;
     } else {
       return false;

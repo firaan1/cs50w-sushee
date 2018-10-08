@@ -6,14 +6,13 @@ SuShee Fashionista
 
 {% block body %}
 
-<hr>
 
 <div class="container">
   <div>
-    <a class="dressbtn btn btn-info" id="kurta" href="#">Add Kurtas</a>
-    <a class="dressbtn btn btn-info" id="top" href="#">Add Tops</a>
-    <a class="dressbtn btn btn-info" id="trouser" href="#">Add Trousers</a>
-    <a class="dressbtn btn btn-info" id="saree" href="#">Add Sarees</a>
+    <a class="dressbtn btn btn-info" id="kurta" href="#"><i class="fas fa-plus"></i> Add Kurtas</a>
+    <a class="dressbtn btn btn-info" id="saree" href="#"><i class="fas fa-plus"></i> Add Sarees</a>
+    <a class="dressbtn btn btn-info" id="top" href="#"><i class="fas fa-plus"></i> Add Tops</a>
+    <a class="dressbtn btn btn-info" id="trouser" href="#"><i class="fas fa-plus"></i> Add Trousers</a>
   </div>
 </div>
 <hr>
@@ -23,11 +22,11 @@ SuShee Fashionista
     <input type="hidden" name="todo" value="additem"/>
     <div class="container dressinputs" id="dkurta">
     </div>
+    <div class="container dressinputs" id="dsaree">
+    </div>
     <div class="container dressinputs" id="dtop">
     </div>
     <div class="container dressinputs" id="dtrouser">
-    </div>
-    <div class="container dressinputs" id="dsaree">
     </div>
   </form>
 </div>
@@ -35,9 +34,9 @@ SuShee Fashionista
 <!-- recently added -->
 <div class="container" id="recent1">
   <div class="container recentdiv" data-dresstype="kurta"></div>
+  <div class="container recentdiv" data-dresstype="saree"></div>
   <div class="container recentdiv" data-dresstype="top"></div>
   <div class="container recentdiv" data-dresstype="trouser"></div>
-  <div class="container recentdiv" data-dresstype="saree"></div>
 </div>
 
 <!-- handlebars -->

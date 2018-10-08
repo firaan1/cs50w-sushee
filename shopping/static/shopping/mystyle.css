@@ -18,10 +18,12 @@
 .historyimg img {
   height:100px;
   width: auto;
+  margin-right: 10px;
 }
 .dressitems a img {
-  height: 200px;
+  height: 250px;
   width: auto;
+  margin-right: 10px;
 }
 .dressitems p {
   width: max-content;
@@ -95,11 +97,6 @@ h1 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; tex
 }
 
 #demo1 img {
-  height: 200px;
+  height: 250px;
   width: auto;
-}
-
-@media only screen and (max-width: 620px) {
-  /* For mobile phones */
-
 }
