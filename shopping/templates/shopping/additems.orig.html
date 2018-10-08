@@ -70,16 +70,7 @@ SuShee Fashionista
 <script id="input_text_template" type="text/x-handlebars-template">
   <div class="form-group col-sm-6">
     <label for="t_{{vartype}}">{{vartype}}</label>
-    {{#if list}}
-      <input type="text" id="t_{{vartype}}" name="t_{{vartype}}" class="t{{dresstype}}" list="t_list_{{vartype}}"/>
-      <datalist id="t_list_{{vartype}}">
-        {{#each list}}
-          <option value="{{this}}">
-        {{/each}}
-      </datalist>
-    {{else}}
-      <input type="text" id="t_{{vartype}}" name="t_{{vartype}}" class="t{{dresstype}}"/>
-    {{/if}}
+    <input type="text" id="t_{{vartype}}" name="t_{{vartype}}" class="t{{dresstype}}"/>
   </div>
 </script>
 <script id="input_image_template" type="text/x-handlebars-template">
@@ -164,27 +155,19 @@ SuShee Fashionista
           // dressobj_dict = {"kurtasize" : {{kurtasize|safe}}}
           dressobj_dict["kurtacolor"] = {{color|safe}}
           dressobj_dict["kurtasize"] = {{kurtasize|safe}}
-          var namelist = "{{kurtaname|safe}}".split(",")
-          var modellist = "{{kurtamodel|safe}}".split(",")
         } else if(anchor.id === "top"){
           dressobj_dict["topcolor"] = {{color|safe}}
           dressobj_dict["topsize"] = {{topsize|safe}}
-          var namelist = "{{topname|safe}}".split(",")
-          var modellist = "{{topmodel|safe}}".split(",")
         } else if(anchor.id === "trouser"){
           dressobj_dict["trousercolor"] = {{color|safe}}
           dressobj_dict["trousersize"] = {{trousersize|safe}}
-          var namelist = "{{trousername|safe}}".split(",")
-          var modellist = "{{trousermodel|safe}}".split(",")
         } else if(anchor.id === "saree"){
           dressobj_dict["sareecolor"] = {{color|safe}}
           dressobj_dict["sareesize"] = {{sareesize|safe}}
-          var namelist = "{{sareename|safe}}".split(",")
-          var modellist = "{{sareemodel|safe}}".split(",")
         }
 
         // create elements
-        add_dress(dresstype, dressobj_dict, namelist, modellist);
+        add_dress(dresstype, dressobj_dict);
 
         // removing divs
         document.querySelectorAll('.dressbtn').forEach(item => {
@@ -204,15 +187,15 @@ SuShee Fashionista
   });
   // end of contentloaded
 
-  function add_dress(dresstype, dressobj_dict, namelist, modellist){
+  function add_dress(dresstype, dressobj_dict){
     const ddresstype = document.querySelector('#d' + dresstype);
     ddresstype.innerHTML = "";
 
     // input name
-    ddresstype.innerHTML += input_text_template({"dresstype" : dresstype, "vartype" : dresstype + "name", "list" : namelist});
+    ddresstype.innerHTML += input_text_template({"dresstype" : dresstype, "vartype" : dresstype + "name"});
 
     // model
-    ddresstype.innerHTML += input_text_template({"dresstype" : dresstype, "vartype" : dresstype + "model", "list" : modellist});
+    ddresstype.innerHTML += input_text_template({"dresstype" : dresstype, "vartype" : dresstype + "model"});
 
     // add images
     ddresstype.innerHTML += input_image_template({"dresstype" : dresstype, "vartype" : dresstype + "image"});

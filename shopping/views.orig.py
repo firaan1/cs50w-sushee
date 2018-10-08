@@ -232,15 +232,7 @@ def additems(request):
         "sareesize" : serialize("json", SareeSize.objects.get_queryset()),
         "trousersize" : serialize("json", TrouserSize.objects.get_queryset()),
         "topsize" : serialize("json", TopSize.objects.get_queryset()),
-        "kurtasize" : serialize("json", KurtaSize.objects.get_queryset()),
-        "kurtaname" : ','.join(set([k.name for k in KurtaRate.objects.get_queryset()])),
-        "kurtamodel" : ','.join(set([k.model for k in KurtaRate.objects.get_queryset()])),
-        "trousername" : ','.join(set([k.name for k in TrouserRate.objects.get_queryset()])),
-        "trousermodel" : ','.join(set([k.model for k in TrouserRate.objects.get_queryset()])),
-        "topname" : ','.join(set([k.name for k in TopRate.objects.get_queryset()])),
-        "topmodel" : ','.join(set([k.model for k in TopRate.objects.get_queryset()])),
-        "sareename" : ','.join(set([k.name for k in SareeRate.objects.get_queryset()])),
-        "sareemodel" : ','.join(set([k.model for k in SareeRate.objects.get_queryset()]))
+        "kurtasize" : serialize("json", KurtaSize.objects.get_queryset())
     }
     if request.method == "POST":
         todo = request.POST['todo']
