@@ -55,8 +55,11 @@ class Color(models.Model):
 # image upload
 class Document(models.Model):
     document = models.FileField(upload_to='documents/%Y/%m/%d')
+    filename = models.CharField(max_length = 100)
     color = models.ForeignKey(Color, on_delete = models.SET_NULL, null = True, related_name = "dress_color")
     datetime = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"Filename: {self.filename}; Color: {self.color}"
 
 # rates
 class KurtaRate(models.Model):
@@ -120,7 +123,7 @@ class DeliveryAddress(models.Model):
 class PlacedOrder(models.Model):
     STATUS = Choices(
         ('new', _('new')),
-        ('in_progress', _('in_progress')),
+        ('out_for_delivery', _('out_for_delivery')),
         ('delivered', _('delivered'))
     )
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, related_name = "ordered_user")
@@ -130,7 +133,7 @@ class PlacedOrder(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits = 9, decimal_places = 2)
     def __str__(self):
-        return f"status: {self.status}; total: {self.total}"
+        return f"status: {self.status}; total: {rupees}{self.total}"
 
 class UserInput(models.Model):
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, related_name = "input_user")

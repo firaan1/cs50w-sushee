@@ -89,7 +89,7 @@ else:
             size.append(KurtaSize.objects.get(size = s))
         ufile = File(open(os.path.join(dir, f), 'rb'))
         uploads = []
-        upload = Document(document = ufile, color = Color.objects.get(name = color.upper()))
+        upload = Document(document = ufile, filename = f, color = Color.objects.get(name = color.upper()))
         upload.save()
         uploads.append(upload)
         dress = KurtaRate(name = name, model = model, price = dtype[model])
@@ -117,7 +117,7 @@ else:
         size = [SareeSize.objects.first()]
         ufile = File(open(os.path.join(dir, f), 'rb'))
         uploads = []
-        upload = Document(document = ufile, color = Color.objects.get(name = color.upper()))
+        upload = Document(document = ufile, filename = f, color = Color.objects.get(name = color.upper()))
         upload.save()
         uploads.append(upload)
         dress = SareeRate(name = name, model = model, price = dtype[model])
@@ -126,6 +126,29 @@ else:
         dress.save()
         dress.image.set(uploads)
         dress.save()
+    dir = "prep/dresses/saree2"
+    dtype = {"GoldenYarn" : 2000 }
+    p = subprocess.Popen(['ls', dir], stdout = subprocess.PIPE)
+    filelist = p.communicate()
+    filelist = filelist[0].decode('utf-8').split('\n')
+    uploads = []
+    for f in filelist:
+        if f == "":
+            continue
+        print(f"{f}")
+        name, model, color = f.split("_")
+        color = color.split(".")[:-1][0]
+        size = [SareeSize.objects.first()]
+        ufile = File(open(os.path.join(dir, f), 'rb'))
+        upload = Document(document = ufile, filename = f, color = Color.objects.get(name = color.upper()))
+        upload.save()
+        uploads.append(upload)
+    dress = SareeRate(name = name, model = model, price = dtype[model])
+    dress.save()
+    dress.size.set(size)
+    dress.save()
+    dress.image.set(uploads)
+    dress.save()
 
 print("Adding TopRate")
 if TopRate.objects.count() > 0:
@@ -147,7 +170,7 @@ else:
             size.append(TopSize.objects.get(size = s))
         ufile = File(open(os.path.join(dir, f), 'rb'))
         uploads = []
-        upload = Document(document = ufile, color = Color.objects.get(name = color.upper()))
+        upload = Document(document = ufile, filename = f, color = Color.objects.get(name = color.upper()))
         upload.save()
         uploads.append(upload)
         dress = TopRate(name = name, model = model, price = dtype[model])
@@ -177,7 +200,7 @@ else:
             size.append(TrouserSize.objects.get(size = s))
         ufile = File(open(os.path.join(dir, f), 'rb'))
         uploads = []
-        upload = Document(document = ufile, color = Color.objects.get(name = color.upper()))
+        upload = Document(document = ufile, filename = f, color = Color.objects.get(name = color.upper()))
         upload.save()
         uploads.append(upload)
         dress = TrouserRate(name = name, model = model, price = dtype[model])
@@ -186,5 +209,3 @@ else:
         dress.save()
         dress.image.set(uploads)
         dress.save()
-
-#

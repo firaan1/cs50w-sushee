@@ -208,7 +208,9 @@ SuShee Fashionista
         });
         item.labels[0].style.border = "solid";
         item.labels[0].style.backgroundColor = "pink";
-        dresssize_input.value = item.value;
+        if ("{{request.user.id}}" != "None"){
+          dresssize_input.value = item.value;
+        }
       }
 
       // oninput
@@ -220,7 +222,9 @@ SuShee Fashionista
           });
           item.labels[0].style.border = "solid";
           item.labels[0].style.backgroundColor = "pink";
-          dresssize_input.value = item.value;
+          if ("{{request.user.id}}" != "None"){
+            dresssize_input.value = item.value;
+          }
         }
       }
     });
@@ -237,7 +241,9 @@ SuShee Fashionista
           });
           item.labels[0].style.border = "solid";
           item.labels[0].style.backgroundColor = "pink";
-          rating_input.value = item.value;
+          if ("{{request.user.id}}" != "None"){
+            rating_input.value = item.value;
+          }
         }
       }
     });
@@ -245,8 +251,8 @@ SuShee Fashionista
     $(".view-full-size").click(function() {
       var theImage = new Image();
       theImage.src = $(this).attr("src")
-      var winWidth = theImage.width + 100;
-      var winHeight = theImage.height + 100;
+      var winWidth = theImage.width + 200;
+      var winHeight = theImage.height + 200;
 
       window.open(theImage.src, null, 'height=' + winHeight + ', width=' + winWidth + ', toolbar=0, location=0, status=0, scrollbars=0, resizable=0');
 

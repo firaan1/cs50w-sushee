@@ -171,13 +171,15 @@ SuShee Fashionista
 
     document.querySelectorAll('.dressbtn').forEach(button => {
       button.onclick = () => {
+        console.log(button.id)
         localStorage.setItem('tmpdressbtn', button.id);
+        console.log(localStorage)
         dressitems.forEach(item => {item.style.display = "none";});
         document.querySelector('#d' + button.id).style.display = "flex";
         if(window.innerWidth <= 575){
           $('html, body').animate({ scrollTop: $('#d' + button.id).offset().top }, 'slow');
         }
-        localStorage.removeItem('tmpdressbtn');
+        // localStorage.removeItem('tmpdressbtn');
       }
     });
 

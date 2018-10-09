@@ -67,14 +67,14 @@ def add_paid_orders(request,address_to_delivery):
 def index(request):
     context = {"incart_items" : len(incart_items(request))}
     # testing form
-    if request.method == 'POST':
-        files = request.FILES.getlist('files')
-        for f in files:
-            fileupload = Document(document = f)
-            fileupload.save()
-        context = {"test" : fileupload.document.url,"incart_items" : len(incart_items(request))}
-    else:
-        pass
+    # if request.method == 'POST':
+    #     files = request.FILES.getlist('files')
+    #     for f in files:
+    #         fileupload = Document(document = f)
+    #         fileupload.save()
+    #     context = {"test" : fileupload.document.url,"incart_items" : len(incart_items(request))}
+    # else:
+    #     pass
     return render(request, "shopping/index.html", context)
 
 def collections(request):
@@ -119,6 +119,7 @@ def histories(request):
             status = str(e)
     placed_orders = PlacedOrder.objects.filter(user = request.user).order_by('-pk')
     context = {
+    "currency" : rupees,
     "kurtarate" : rate_dict['kurta']['rate'].objects.all(),
     "toprate" : rate_dict['top']['rate'].objects.all(),
     "trouserrate" : rate_dict['trouser']['rate'].objects.all(),
@@ -258,7 +259,7 @@ def additems(request):
             # return HttpResponse(str(images[0]))
             uploaded_images = []
             for i in images:
-                upload = Document(document = i, color = Color.objects.get(code = dresscolor))
+                upload = Document(document = i, filename = i.name, color = Color.objects.get(code = dresscolor))
                 upload.save()
                 uploaded_images.append(upload)
             # return HttpResponse(str(uploaded_images))

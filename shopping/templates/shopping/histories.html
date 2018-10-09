@@ -54,7 +54,7 @@ SuShee Fashionista
         {% endif %}
       {% endfor %}
     <p>Status: {{placed_order.status}}</p>
-    <p>Total: {{placed_order.total}}</p>
+    <p>Total: {{currency}}{{placed_order.total}}</p>
 {% empty %}
     <h4>No previous orders</h4>
 {% endfor %}
