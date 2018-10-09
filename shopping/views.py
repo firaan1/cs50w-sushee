@@ -147,6 +147,11 @@ def cart(request):
                 [d.delete() for d in DressOrder.objects.filter(user_id = request.user.id)]
             except:
                 return HttpResponse("Error Deleting items")
+        elif todo == "deleteaddress":
+            address_pk = request.POST['address_pk']
+            delete_address = DeliveryAddress.objects.filter(user = request.user, pk = address_pk).last()
+            if delete_address:
+                delete_address.delete()
         return HttpResponseRedirect(reverse("cart"))
     userorders = DressOrder.objects.filter(user = request.user, paid = False).order_by('-pk')
     userorder_list = []

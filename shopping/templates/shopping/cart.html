@@ -63,8 +63,14 @@ SuShee Fashionista
         {% endfor %}
       </select>
     </div>
-    <div class="form-group col-sm-6" style="margin-top:30px;">
+    <div class="form-group col-sm-6" style="margin-top:30px;display:flex;">
       <button type="button" class="btn btn-dark" id="add_new_address">+</button>
+      <form method="post" style="margin-left:5px;">
+        {% csrf_token %}
+        <input type="hidden" name="todo" value="deleteaddress"/>
+        <input type="hidden" id="address_pk" name="address_pk" value=""/>
+        <button type="submit" class="btn btn-dark" id="delete_address" disabled><i class="fas fa-trash-alt"></i></button>
+      </form>
     </div>
     <div class="col-sm-6">
       <form method="post" id="new_address_form">
@@ -114,6 +120,7 @@ SuShee Fashionista
       const new_address_form = document.querySelector('#new_address_form');
       const dmake_payment = document.querySelector('#dmake_payment');
       new_address_form.style.display = "none";
+      dmake_payment.style.display = "none";
       count = 0;
       // address
       document.querySelector('#add_new_address').onclick = () => {
@@ -162,9 +169,22 @@ SuShee Fashionista
       // address update
       const delivery_address = document.querySelector('#delivery_address');
       const address_to_delivery = document.querySelector('#address_to_delivery');
+      const delete_address = document.querySelector('#delete_address')
+      const address_pk = document.querySelector('#address_pk')
       address_to_delivery.value = delivery_address.value;
+      address_pk.value = delivery_address.value;
+      delete_address.disabled = true;
+      if(delivery_address.selectedIndex > -1){
+        delete_address.disabled = false;
+        dmake_payment.style.display = "block";
+      }
       delivery_address.onchange = () => {
         address_to_delivery.value = delivery_address.value;
+        address_pk.value = delivery_address.value;
+        if(delivery_address.selectedIndex > -1){
+          delete_address.disabled = false;
+          dmake_payment.style.display = "block";
+        }
       }
 
     }
