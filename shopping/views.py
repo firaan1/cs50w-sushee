@@ -66,15 +66,6 @@ def add_paid_orders(request,address_to_delivery):
 # Create your views here.
 def index(request):
     context = {"incart_items" : len(incart_items(request))}
-    # testing form
-    # if request.method == 'POST':
-    #     files = request.FILES.getlist('files')
-    #     for f in files:
-    #         fileupload = Document(document = f)
-    #         fileupload.save()
-    #     context = {"test" : fileupload.document.url,"incart_items" : len(incart_items(request))}
-    # else:
-    #     pass
     return render(request, "shopping/index.html", context)
 
 def collections(request):

@@ -116,7 +116,6 @@ class DeliveryAddress(models.Model):
     address = models.CharField(max_length = 1000)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True) # validators should be a list
-    # taken from https://stackoverflow.com/questions/19130942/whats-the-best-way-to-store-phone-number-in-django-models
     def __str__(self):
         return f"{self.address}, {self.phone_number}"
 
@@ -127,7 +126,7 @@ class PlacedOrder(models.Model):
         ('delivered', _('delivered'))
     )
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True, related_name = "ordered_user")
-    deliveryaddress = models.ForeignKey(DeliveryAddress, on_delete = models.SET_NULL, null = True, related_name = "delivery_address")
+    deliveryaddress = models.ForeignKey(DeliveryAddress, on_delete = models.SET_NULL, null = True, related_name = "delivery_address", blank = True)
     order = models.ManyToManyField(DressOrder, related_name = "ordered_dress")
     status = models.CharField(choices = STATUS, default = STATUS.new, max_length = 25)
     datetime = models.DateTimeField(auto_now_add=True)

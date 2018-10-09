@@ -26,3 +26,57 @@ python manage.py createsuperuser
 # start django server
 python manage.py runserver
 ```
+
+## Contents
+
+The directory structure is shown below,
+
+``` bash
+susheefashionista/
+├── db.sqlite3 # database (will be created by the admin from the command line using migration)
+├── manage.py # django file
+├── media # media folder where uploaded files are saved
+│   └── documents
+├── prep # prep folder containing images which will be imported into the database by prep.py file
+├── prep.py # preparation file to import data into database
+├── README.md # readme
+├── requirements.txt # python package requirements. must be installed using pip
+├── shopping # django app folder
+│   ├── admin.py # admin site difinitions
+│   ├── apps.py
+│   ├── forms.py # forms containing function to upload data
+│   ├── __init__.py
+│   ├── migrations
+│   ├── models.py # containing all the database models used
+│   ├── __pycache__
+│   ├── static
+│   │   └── shopping
+│   │       ├── css
+│   │       │   └── mystyle.css # included style sheet file
+│   │       └── images # used images
+│   │           ├── img1.jpg
+│   │           ├── img2.jpg
+│   │           ├── img3.jpg
+│   │           ├── img4.jpg
+│   │           └── img.jpg
+│   ├── templates # html templates
+│   │   └── shopping
+│   │       ├── additems.html # allows admin to add items to the database
+│   │       ├── cart.html
+│   │       ├── collections.html # shows all the dress collections
+│   │       ├── dressitem.html # individual dress page
+│   │       ├── histories.html # contains order histories
+│   │       ├── index.html # home page
+│   │       ├── layout.html # base layout for all other html files
+│   │       ├── login.html
+│   │       └── register.html
+│   ├── tests.py
+│   ├── urls.py # containing url definitions
+│   └── views.py # contains python function definitions for django
+└── sushee
+    ├── __init__.py
+    ├── __pycache__
+    ├── settings.py # django settings file where the app, static and media folders are registered
+    ├── urls.py
+    └── wsgi.py
+```
