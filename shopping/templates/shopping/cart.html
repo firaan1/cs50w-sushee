@@ -5,6 +5,26 @@ SuShee Fashionista
 {% endblock %}
 
 {% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3 side-menu" id="skipsidemenu0">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link dressbtnlayout"id="menu_kurta" data-id="kurta" href="#">Kurtas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dressbtnlayout" id="menu_saree" data-id="saree" href="#">Sarees</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dressbtnlayout" id="menu_top" data-id="top" href="#">Tops</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dressbtnlayout" id="menu_trouser" data-id="trouser" href="#">Trousers</a>
+        </li>
+      </ul>
+      <hr class="d-sm-none">
+    </div>
+    <div class="col-sm-9">
 
 <div class="container">
   {% if userorder_list %}
@@ -108,6 +128,9 @@ SuShee Fashionista
     </div>
   </div>
   {% endif %}
+</div>
+</div>
+</div>
 </div>
 
 

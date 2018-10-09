@@ -72,7 +72,6 @@
 
     {% block body %}
     {% endblock %}
-
     <script type="text/javascript">
 
 
@@ -85,6 +84,14 @@
         }
       }
     );
+
+    // dress button layout
+    document.querySelectorAll('.dressbtnlayout').forEach(button => {
+      button.onclick = () => {
+        localStorage.setItem('tmpdressbtn', button.dataset.id);
+        window.location = location.protocol + '//' + document.domain + ':' + location.port + "/collections";
+      }
+    });
 
     // background image
     window.onload =  function (e) {
