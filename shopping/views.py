@@ -167,7 +167,7 @@ def cart(request):
     }
     return render(request, "shopping/cart.html", context)
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def dressitem(request, dress_type, dress_id):
     if not dress_type in rate_dict.keys():
         return render(request, "shopping/index.html", {"message" : "Unknown URL path", "incart_items" : len(incart_items(request))})
@@ -215,7 +215,8 @@ def dressitem(request, dress_type, dress_id):
             elif todo == "delete_review":
                 user_input.review = None
             user_input.save()
-    context["currentuserinput"] = UserInput.objects.filter(dresspk = dress_id, user = request.user).first()
+    if request.user.id:
+        context["currentuserinput"] = UserInput.objects.filter(dresspk = dress_id, user = request.user).first()
     context["userinput"] = UserInput.objects.filter(dresspk = dress_id).order_by('-pk')
     context["overall_rating"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Avg("rating"))
     context["overall_rating_count"] = UserInput.objects.filter(dresspk = dress_id).aggregate(Count("rating"))
